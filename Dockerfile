@@ -1,5 +1,10 @@
 FROM archlinux:base
 
+RUN pacman -Sy \
+        reflector \
+        --needed --noconfirm \
+    && reflector --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+
 RUN pacman -Syyu \
         unbound \
         openresolv  \
