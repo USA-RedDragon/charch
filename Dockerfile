@@ -22,8 +22,7 @@ RUN pacman -Syyu \
         --needed --noconfirm \
     && mkdir /tmp/squashfs \
     && curl -fSsL https://github.com/RegalisTechnologies/mkinitcpio-squashfs/archive/master.tar.gz -o - | tar -xz -C /tmp/squashfs \
-    && cd /tmp/squashfs \
-    && make -C /tmp/squashfs install DESTDIR=/ \
+    && make -C /tmp/squashfs/mkinitcpio-squashfs-master install DESTDIR=/ \
     && rm -rf /tmp/squashfs \
     && pacman -Rs \
         make \
