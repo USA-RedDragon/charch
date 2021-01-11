@@ -26,7 +26,7 @@ RUN pacman -Syyu \
     && rm -rf /tmp/squashfs \
     && pacman -Rs \
         make \
-        --uneeded --noconfirm
+        --unneeded --noconfirm
 
 RUN mkdir /tmp/bgp \
     && curl -fSsL https://github.com/osrg/gobgp/releases/download/v2.23.0/gobgp_2.23.0_linux_amd64.tar.gz -o - | tar -xz -C /tmp/bgp \
