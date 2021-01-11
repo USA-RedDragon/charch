@@ -2,7 +2,7 @@
 
 set -xe
 
-rm -rf charch-rootfs-ahead.tar charch-rootfs-ahead.zstd.sqfs
+rm -rf charch-rootfs-ahead.tar charch-rootfs-ahead.zstd.sqfs charch-initramfs-ahead.zstd.img charch-vmlinuz-ahead
 docker stop -t 1 charch-rootfs-sleep || true
 docker rm charch-rootfs-sleep || true
 
