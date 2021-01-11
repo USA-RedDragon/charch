@@ -22,7 +22,7 @@ docker_stop_remove_container ${CONTAINER_ROOTFS_EXPORT}
 
 FS_TMP_DIR=$(mktemp -d)
 tar -C ${FS_TMP_DIR} -xf artifacts/charch-rootfs-ahead.tar
-mksquashfs ${FS_TMP_DIR} artifacts/charch-rootfs-ahead.zstd.sqfs -comp zstd -exit-on-error -progress
+mksquashfs ${FS_TMP_DIR} artifacts/charch-rootfs-ahead.zstd.sqfs -comp zstd -Xcompression-level 22 -exit-on-error -progress
 rm -rf ${FS_TMP_DIR} artifacts/charch-rootfs-ahead.tar
 sha512sum artifacts/charch-rootfs-ahead.zstd.sqfs > artifacts/charch-rootfs-ahead.zstd.sqfs.sha512sum
 
