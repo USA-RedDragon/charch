@@ -3,7 +3,7 @@ FROM archlinux:base
 RUN pacman -Sy \
         reflector \
         --needed --noconfirm \
-    && reflector --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+    && reflector --country US --age 12 --protocol https --ipv4 --ipv6 --sort rate --save /etc/pacman.d/mirrorlist 
 
 RUN pacman -Syyu \
         unbound \
