@@ -19,6 +19,8 @@ RUN pacman -Syyu \
         make \
         linux \
         linux-firmware \
+        wget \
+        pv \
         --needed --noconfirm \
     && mkdir /tmp/squashfs \
     && curl -fSsL https://github.com/RegalisTechnologies/mkinitcpio-squashfs/archive/master.tar.gz -o - | tar -xz -C /tmp/squashfs \
