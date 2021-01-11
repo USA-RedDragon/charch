@@ -2,23 +2,28 @@
 
 set -xe
 
-rm -rf charch-rootfs-ahead.tar charch-rootfs-ahead.zstd.sqfs charch-initramfs-ahead.zstd.img charch-vmlinuz-ahead
-docker stop -t 1 charch-rootfs-sleep || true
-docker rm charch-rootfs-sleep || true
+CONTAINER_ROOTFS_EXPORT=charch-rootfs-sleep
+
+rm -rf artifacts/
+mkdir -p ./artifacts
+chmod a+r ./artifacts
+
+source `pwd`/scripts/funcs.sh
+
+docker_stop_remove_container ${CONTAINER_ROOTFS_EXPORT} || true
 
 docker build -t jamcswain/charch:ahead .
 
-docker run -d --name charch-rootfs-sleep jamcswain/charch:ahead sleep infinity
+docker run -d --name ${CONTAINER_ROOTFS_EXPORT} jamcswain/charch:ahead sleep infinity
 
-docker export -o charch-rootfs-ahead.tar charch-rootfs-sleep
+docker export -o artifacts/charch-rootfs-ahead.tar ${CONTAINER_ROOTFS_EXPORT}
 
-docker stop -t 1 charch-rootfs-sleep
-docker rm charch-rootfs-sleep
+docker_stop_remove_container ${CONTAINER_ROOTFS_EXPORT}
 
 FS_TMP_DIR=$(mktemp -d)
-tar -C ${FS_TMP_DIR} -xf charch-rootfs-ahead.tar
-mksquashfs ${FS_TMP_DIR} charch-rootfs-ahead.zstd.sqfs -comp zstd -exit-on-error -progress
+tar -C ${FS_TMP_DIR} -xf artifacts/charch-rootfs-ahead.tar
+mksquashfs ${FS_TMP_DIR} artifacts/charch-rootfs-ahead.zstd.sqfs -comp zstd -exit-on-error -progress
 rm -rf ${FS_TMP_DIR}
 
-./scripts/generate-initramfs.sh charch-initramfs-ahead.zstd.img
-./scripts/copy-kernel.sh charch-vmlinuz-ahead
+./scripts/generate-initramfs.sh artifacts/charch-initramfs-ahead.zstd.img
+./scripts/copy-kernel.sh artifacts/charch-vmlinuz-ahead

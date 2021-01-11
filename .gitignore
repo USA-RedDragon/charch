@@ -2,3 +2,5 @@ charch-rootfs-ahead.tar
 charch-rootfs-ahead.zstd.sqfs
 charch-initramfs-ahead.zstd.img
 charch-vmlinuz-ahead
+*.sha512sum
+artifacts/
