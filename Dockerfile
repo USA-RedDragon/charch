@@ -37,5 +37,3 @@ RUN mkdir /tmp/bgp \
     && rm -rf /tmp/bgp
 
 COPY configs/mkinitcpio.conf /etc/mkinitcpio.conf
-
-RUN rm -rf /boot/*
