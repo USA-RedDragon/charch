@@ -219,6 +219,9 @@ run_hook() {
 	if [[ -z ${squashfs} ]]; then
 		return 0;
 	fi
+	if [[ -z ${overlayroot} ]]; then
+		return 0;
+	fi
 	mount_handler=mount_handler_squashfs;
 }
 
