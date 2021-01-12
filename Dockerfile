@@ -9,6 +9,7 @@ RUN pacman -Syyu \
         unbound \
         openresolv \
         dhcp \
+        dhcpcd \
         ufw \
         wireguard-tools \
         radvd \
