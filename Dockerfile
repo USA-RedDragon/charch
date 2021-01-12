@@ -31,4 +31,4 @@ RUN mkdir /tmp/bgp \
 
 COPY configs/ /
 
-# RUN rm -rf /boot/*
+RUN rm -rf /boot/*
