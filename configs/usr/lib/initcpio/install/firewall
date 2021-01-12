@@ -8,6 +8,8 @@ build() {
 	add_module ip6table_filter
 	add_binary /usr/bin/iptables
 	add_binary /usr/bin/ip6tables
+	add_binary /usr/lib/xtables/libxt_standard.so
+	add_binary /usr/lib/xtables/libxt_conntrack.so
 }
 
 help() {
