@@ -16,7 +16,6 @@ RUN pacman -Syyu \
         curl \
         mkinitcpio \
         mkinitcpio-nfs-utils \
-        make \
         linux \
         linux-firmware \
         wget \
