@@ -21,14 +21,7 @@ RUN pacman -Syyu \
         linux-firmware \
         wget \
         pv \
-        --needed --noconfirm \
-    && mkdir /tmp/squashfs \
-    && curl -fSsL https://github.com/RegalisTechnologies/mkinitcpio-squashfs/archive/master.tar.gz -o - | tar -xz -C /tmp/squashfs \
-    && make -C /tmp/squashfs/mkinitcpio-squashfs-master install DESTDIR=/ \
-    && rm -rf /tmp/squashfs \
-    && pacman -Rs \
-        make \
-        --unneeded --noconfirm
+        --needed --noconfirm
 
 RUN mkdir /tmp/bgp \
     && curl -fSsL https://github.com/osrg/gobgp/releases/download/v2.23.0/gobgp_2.23.0_linux_amd64.tar.gz -o - | tar -xz -C /tmp/bgp \
@@ -36,6 +29,6 @@ RUN mkdir /tmp/bgp \
     && mv -v /tmp/bgp/gobgpd /usr/bin/gobgpd \
     && rm -rf /tmp/bgp
 
-COPY configs/mkinitcpio.conf /etc/mkinitcpio.conf
+COPY configs/* /
 
 RUN rm -rf /boot/*
