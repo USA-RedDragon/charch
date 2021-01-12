@@ -31,14 +31,6 @@ RUN mkdir /tmp/bgp \
     && mv -v /tmp/bgp/gobgpd /usr/bin/gobgpd \
     && rm -rf /tmp/bgp
 
-COPY configs/ /
-
-RUN ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
-
-RUN systemctl enable sshd
-RUN systemctl enable qemu-guest-agent
-RUN systemctl enable ufw
-
 RUN ufw default deny incoming \
     && ufw default allow outgoing \
     # SSH from LAN
@@ -55,5 +47,13 @@ RUN ufw default deny incoming \
     && ufw allow from 192.168.1.0/24 to any port 853 proto tcp \
     # Wireguard from WAN and LAN
     && ufw allow from any to any port 51820 proto udp
+
+COPY configs/ /
+
+RUN ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
+
+RUN systemctl enable sshd
+RUN systemctl enable qemu-guest-agent
+RUN systemctl enable ufw
 
 RUN rm -rf /boot/*
