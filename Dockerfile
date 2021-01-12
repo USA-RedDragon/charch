@@ -54,6 +54,6 @@ RUN ufw default deny incoming \
     # DNS over TLS from LAN
     && ufw allow from 192.168.1.0/24 to any port 853 proto tcp \
     # Wireguard from WAN and LAN
-    && ufw allow from any proto to any port 51820 proto udp
+    && ufw allow from any to any port 51820 proto udp
 
 RUN rm -rf /boot/*
