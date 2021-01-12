@@ -31,4 +31,6 @@ RUN mkdir /tmp/bgp \
 
 COPY configs/ /
 
+RUN ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
+
 RUN rm -rf /boot/*
