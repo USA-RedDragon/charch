@@ -1,0 +1,40 @@
+#!/usr/bin/ash
+
+run_hook() {
+	# Check which interface offers DHCP and a public IP
+	ifaces=( $(ip addr list | awk -F': ' '/^[0-9]/ && $2 != "lo" {print $2}') )
+	wan_oldname=""
+	lan_oldname=""
+	for iface in ${ifaces[@]}; do
+		dhcpcd -T $iface -t 5
+		if [ $? -ne 0 ]; then
+			echo $iface does not broadcast DHCP
+			lan_oldname=$iface
+		else
+			echo $iface broadcasts DHCP
+			wan_oldname=$iface
+		fi
+		if [[ "X$lan_oldname" != "X"]]; then
+			if [[ "X$wan_oldname" != "X"]]; then
+				break
+			fi
+		fi
+	done
+	# Rename DHCP interface to wan
+	ip link set ${wan_oldname} down
+	ip link set ${wan_oldname} name wan
+	ip link set wan up
+
+	if [[ "X$lan_oldname" == "X"]]; then
+		lan_oldname=lan_dummy
+		ip link add ${lan_oldname} type dummy
+	fi
+
+	ip link set ${lan_oldname} down
+	ip link set ${lan_oldname} name lan
+	ip addr add 192.168.1.1/24 dev lan
+	ip route add 192.168.1.0/24 dev lan
+	ip link set lan up
+}
+
+# vim: ai ts=4 sw=4 ft=sh:

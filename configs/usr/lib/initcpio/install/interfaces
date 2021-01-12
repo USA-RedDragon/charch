@@ -1,0 +1,15 @@
+#!/usr/bin/ash
+
+build() {
+	add_runscript
+	add_binary /usr/bin/ip
+	add_binary /usr/bin/dhcpcd
+}
+
+help() {
+	cat <<EOF
+Identifies NICs for WAN and LAN and renames them to `wan` and `lan`
+EOF
+}
+
+# vim: ai ts=4 sw=4 ft=sh:
