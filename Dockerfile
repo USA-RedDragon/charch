@@ -29,6 +29,6 @@ RUN mkdir /tmp/bgp \
     && mv -v /tmp/bgp/gobgpd /usr/bin/gobgpd \
     && rm -rf /tmp/bgp
 
-COPY configs/* /
+COPY configs/ /
 
-RUN rm -rf /boot/*
+# RUN rm -rf /boot/*
