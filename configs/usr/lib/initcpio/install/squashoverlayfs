@@ -22,6 +22,7 @@ build() {
 	add_runscript
 	add_module loop
 	add_module squashfs
+	add_module overlay
 	add_binary /usr/bin/wget
 	add_binary /usr/bin/pv
 	add_binary /usr/bin/find

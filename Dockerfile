@@ -21,6 +21,7 @@ RUN pacman -Syyu \
         linux-firmware \
         wget \
         pv \
+        overlayfs-progs \
         --needed --noconfirm
 
 RUN mkdir /tmp/bgp \

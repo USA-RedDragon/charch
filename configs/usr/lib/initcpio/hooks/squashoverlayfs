@@ -151,17 +151,21 @@ mount_handler_squashfs() {
 	if [[ $? -eq 0 ]]; then
 		echo "Root already mounted, skipping..."
 	else
-		mount -t squashfs "${squashfs_imagepath}" "$1" -o loop
+		mount -t squashfs "${squashfs_imagepath}" /squashfs/overlay -o loop
 		if [[ ! $? -eq 0 ]]; then
 			err "Unable to mount SquashFS image..."
 			launch_interactive_shell
 		fi
+		mount -t overlay overlay -o lowerdir=/squashfs/overlay,upperdir=/squashfs/upper,workdir=/squashfs/work "$1"
 	fi
 }
 
 squashfs_prepare_tmpfs() {
 	mount -t tmpfs tmpfs /squashfs -o size=80%;
 	chmod 0755 /squashfs;
+	mkdir -p /squashfs/overlay
+	mkdir -p /squashfs/work
+	mkdir -p /squashfs/upper
 }
 
 # arguments
@@ -213,7 +217,7 @@ squashfs_source_postmount() {
 }
 
 run_hook() {
-	if [[ -z ${squashfs} ]]; then
+	if [[ -z ${squashoverlayfs} ]]; then
 		return 0;
 	fi
 	mount_handler=mount_handler_squashfs;
