@@ -42,19 +42,18 @@ RUN systemctl enable ufw
 RUN ufw default deny incoming \
     && ufw default allow outgoing \
     # SSH from LAN
-    && ufw allow in on lan proto tcp to 127.0.0.1 port 22 \
+    && ufw allow from 192.168.1.0/24 to any port 22 proto tcp \
     # DNS from LAN
-    && ufw allow in on lan proto udp to 127.0.0.1 port 53 \
+    && ufw allow from 192.168.1.0/24 to any port 53 proto udp \
     # DHCP from LAN
-    && ufw allow in on lan proto udp to 127.0.0.1 port 67 \
+    && ufw allow from 192.168.1.0/24 to any port 67 proto udp \
     # BGP from LAN
-    && ufw allow in on lan proto tcp to 127.0.0.1 port 179 \
+    && ufw allow from 192.168.1.0/24 to any port 179 proto tcp \
     # DHCPv6 from LAN
-    && ufw allow in on lan proto udp to 127.0.0.1 port 546 \
+    && ufw allow from 192.168.1.0/24 to any port 546 proto udp \
     # DNS over TLS from LAN
-    && ufw allow in on lan proto tcp to 127.0.0.1 port 853 \
+    && ufw allow from 192.168.1.0/24 to any port 853 proto tcp \
     # Wireguard from WAN and LAN
-    && ufw allow in on wan proto udp to 127.0.0.1 port 51820 \
-    && ufw allow in on lan proto udp to 127.0.0.1 port 51820
+    && ufw allow from any proto to any port 51820 proto udp
 
 RUN rm -rf /boot/*
