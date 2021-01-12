@@ -157,6 +157,10 @@ mount_handler_squashfs() {
 			launch_interactive_shell
 		fi
 		mount -t overlay overlay -o lowerdir=/squashfs/overlay,upperdir=/squashfs/upper,workdir=/squashfs/work "$1"
+		if [[ ! $? -eq 0 ]]; then
+			err "Unable to mount overlay at $1..."
+			launch_interactive_shell
+		fi
 	fi
 }
 
