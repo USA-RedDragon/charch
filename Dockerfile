@@ -21,6 +21,7 @@ RUN pacman -Syyu \
         linux-firmware \
         wget \
         pv \
+        openssh \
         --needed --noconfirm
 
 RUN mkdir /tmp/bgp \
@@ -32,5 +33,7 @@ RUN mkdir /tmp/bgp \
 COPY configs/ /
 
 RUN ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
+
+RUN systemctl enable sshd
 
 RUN rm -rf /boot/*
