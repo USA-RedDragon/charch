@@ -4,6 +4,7 @@ run_hook() {
 	# Check which interface offers DHCP and a public IP
 	wan_oldname=""
 	lan_oldname=""
+
 	echo "$(ip addr list | awk -F': ' '/^[0-9]/ && $2 != "lo" {print $2}')" > /tmp/ifaces
 	while IFS= read iface
 	do
@@ -34,8 +35,8 @@ run_hook() {
 
 	ip link set ${lan_oldname} down
 	ip link set ${lan_oldname} name lan
-	ip addr add 192.168.1.1/24 dev lan
-	ip route add 192.168.1.0/24 dev lan
+	ip addr add 192.168.2.1/24 dev lan
+	ip route add 192.168.2.0/24 dev lan
 	ip link set lan up
 }
 
