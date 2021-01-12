@@ -1,0 +1,17 @@
+#!/usr/bin/ash
+
+build() {
+	add_runscript
+	add_module ip_tables
+	add_module iptable_filter
+	add_binary /usr/bin/iptables
+	add_binary /usr/bin/ip6tables
+}
+
+help() {
+	cat <<EOF
+Sets up iptables to block all traffic in before a firewall can take over at boot
+EOF
+}
+
+# vim: ai ts=4 sw=4 ft=sh:
