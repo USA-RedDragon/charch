@@ -151,12 +151,7 @@ mount_handler_squashfs() {
 	if [[ $? -eq 0 ]]; then
 		echo "Root already mounted, skipping..."
 	else
-		mount -t squashfs "${squashfs_imagepath}" /squashfs/overlay -o loop
-		if [[ ! $? -eq 0 ]]; then
-			err "Unable to mount SquashFS image..."
-			launch_interactive_shell
-		fi
-		mount -t overlay overlay -o lowerdir=/squashfs/overlay,upperdir=/squashfs/upper,workdir=/squashfs/work "$1"
+		mount -t overlay overlay -o "lowerdir=${squashfs_imagepath},upperdir=/squashfs/upper,workdir=/squashfs/work" "$1"
 		if [[ ! $? -eq 0 ]]; then
 			err "Unable to mount overlay at $1..."
 			launch_interactive_shell
