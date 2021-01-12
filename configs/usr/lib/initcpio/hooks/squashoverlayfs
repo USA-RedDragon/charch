@@ -216,7 +216,7 @@ squashfs_source_postmount() {
 }
 
 run_hook() {
-	if [[ -z ${squashoverlayfs} ]]; then
+	if [[ -z ${squashfs} ]]; then
 		return 0;
 	fi
 	mount_handler=mount_handler_squashfs;
