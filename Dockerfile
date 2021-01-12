@@ -22,6 +22,7 @@ RUN pacman -Syyu \
         wget \
         pv \
         openssh \
+        qemu-guest-agent \
         --needed --noconfirm
 
 RUN mkdir /tmp/bgp \
@@ -35,5 +36,6 @@ COPY configs/ /
 RUN ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
 
 RUN systemctl enable sshd
+RUN systemctl enable qemu-guest-agent
 
 RUN rm -rf /boot/*
