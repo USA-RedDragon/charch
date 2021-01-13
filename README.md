@@ -18,6 +18,7 @@ PXE-bootable Arch Linux-based OS setup for a home router
 - BGP (gobgpd, eventually)
 - Wireguard (eventually)
 - QEMU guest agent
+- Live ISO booting
 
 ## Requirements
 
@@ -26,6 +27,8 @@ PXE-bootable Arch Linux-based OS setup for a home router
 - sha512sum
 - A kernel and tooling that supports zstd compression
 - awk, sed, and grep probably
+- xorriso
+- syslinux
 
 ## Building
 
