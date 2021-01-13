@@ -34,8 +34,6 @@ run_hook() {
 
 	iptables -A INPUT -i wan -j DROP
 	ip6tables -A INPUT -i wan -j DROP
-	iptables -A FORWARD -i wan -j DROP
-	ip6tables -A FORWARD -i wan -j DROP
 }
 
 # vim: ai ts=4 sw=4 ft=sh:
