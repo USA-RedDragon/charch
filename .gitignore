@@ -4,3 +4,4 @@ charch-initramfs-ahead.zstd.img
 charch-vmlinuz-ahead
 *.sha512sum
 artifacts/
+charchlive.iso
