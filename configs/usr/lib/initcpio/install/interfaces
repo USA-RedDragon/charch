@@ -3,8 +3,11 @@
 build() {
 	add_runscript
 	add_module dummy
+	add_module e1000
+	add_module igb
 	add_binary /usr/bin/ip
 	add_binary /usr/bin/dhcpcd
+	add_binary /usr/bin/sysctl
 }
 
 help() {

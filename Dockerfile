@@ -23,6 +23,7 @@ RUN pacman -Syyu \
         pv \
         openssh \
         qemu-guest-agent \
+        nano \
         --needed --noconfirm
 
 RUN mkdir /tmp/bgp \
@@ -37,5 +38,7 @@ RUN ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
 
 RUN systemctl enable sshd
 RUN systemctl enable qemu-guest-agent
+RUN systemctl enable systemd-networkd
+RUN systemctl enable systemd-resolved
 
 RUN rm -rf /boot/*

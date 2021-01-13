@@ -4,7 +4,7 @@ set -xe
 
 CONTAINER_ROOTFS_EXPORT=charch-rootfs-sleep
 
-rm -rf artifacts/
+rm -rf artifacts/ charchlive.iso
 mkdir -p ./artifacts
 chmod a+r ./artifacts
 
@@ -45,7 +45,7 @@ label Charch
     menu label ^Charch
     menu default
     kernel /live/vmlinuz
-    append initrd=/live/initrd boot=live overlayroot squashfs_copy=true squashfs=/dev/sda1:AUTO
+    append initrd=/live/initrd boot=live overlayroot squashfs_copy=true squashfs=/dev/sr0:AUTO lan_hwaddr=00:1b:22:76:28:02 wan_hwaddr=00:1b:22:76:28:03
 __EOF__
 
 cp /usr/lib/syslinux/bios/* artifacts/image/isolinux/

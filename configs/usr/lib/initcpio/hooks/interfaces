@@ -2,42 +2,40 @@
 
 run_hook() {
 	# Check which interface offers DHCP and a public IP
-	wan_oldname=""
-	lan_oldname=""
+	wan_hwaddr="${wan_hwaddr}"
+	lan_hwaddr="${lan_hwaddr}"
 
-	echo "$(ip addr list | awk -F': ' '/^[0-9]/ && $2 != "lo" {print $2}')" > /tmp/ifaces
-	while IFS= read iface
-	do
-		dhcpcd -T $iface -t 5
-		if [ $? -ne 0 ]; then
-			echo $iface does not broadcast DHCP
-			lan_oldname=$iface
-		else
-			echo $iface broadcasts DHCP
-			wan_oldname=$iface
-		fi
+	wan_oldname=$(ip -br link | awk "\$3 ~ /${lan_hwaddr}/ {print \$1}")
+	lan_oldname=$(ip -br link | awk "\$3 ~ /${wan_hwaddr}/ {print \$1}")
 
-		if [ "X$lan_oldname" != "X" ]; then
-			if [ "X$wan_oldname" != "X" ]; then
-				break
-			fi
-		fi
-	done </tmp/ifaces
 	# Rename DHCP interface to wan
 	ip link set ${wan_oldname} down
 	ip link set ${wan_oldname} name wan
 	ip link set wan up
 
 	if [ "X$lan_oldname" == "X" ]; then
-		lan_oldname=lan_dummy
-		ip link add ${lan_oldname} type dummy
+		if [ "${boot}" != "live" ]; then
+			lan_oldname=lan_dummy
+			ip link add ${lan_oldname} type dummy
+		fi
 	fi
 
 	ip link set ${lan_oldname} down
 	ip link set ${lan_oldname} name lan
-	ip addr add 192.168.2.1/24 dev lan
-	ip route add 192.168.2.0/24 dev lan
+	ip addr add 192.168.1.1/24 dev lan
+	ip route add 192.168.1.0/24 dev lan
 	ip link set lan up
+
+	iptables -F
+	sysctl -w net.ipv4.ip_forward=1
+	iptables -t nat -A POSTROUTING ! -d 192.168.1.1/24 -o wan -j MASQUERADE
+	iptables -P INPUT ACCEPT
+	iptables -P FORWARD ACCEPT
+
+	iptables -A INPUT -i wan -j DROP
+	ip6tables -A INPUT -i wan -j DROP
+	iptables -A FORWARD -i wan -j DROP
+	ip6tables -A FORWARD -i wan -j DROP
 }
 
 # vim: ai ts=4 sw=4 ft=sh:

@@ -19,7 +19,6 @@ run_hook() {
 
 	# Allow established sessions to receive traffic
 	iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-
 	ip6tables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 }
 

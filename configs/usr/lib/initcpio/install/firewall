@@ -6,11 +6,14 @@ build() {
 	add_module ip6_tables
 	add_module iptable_filter
 	add_module ip6table_filter
+	add_module iptable_nat
 	add_module xt_conntrack
+	add_module xt_MASQUERADE
 	add_binary /usr/bin/iptables
 	add_binary /usr/bin/ip6tables
 	add_binary /usr/lib/xtables/libxt_standard.so
 	add_binary /usr/lib/xtables/libxt_conntrack.so
+	add_binary /usr/lib/xtables/libipt_MASQUERADE.so
 }
 
 help() {
