@@ -7,7 +7,6 @@ build() {
 	add_module igb
 	add_binary /usr/bin/ip
 	add_binary /usr/bin/dhcpcd
-	add_binary /usr/bin/sysctl
 }
 
 help() {
