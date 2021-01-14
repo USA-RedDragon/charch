@@ -1,7 +1,7 @@
 #!/usr/bin/ash
 
 run_hook() {
-	nft flush ruleset ';' include '"/etc/nftables.conf"'
+	nft -f /etc/nftables.conf
 }
 
 # vim: ai ts=4 sw=4 ft=sh:
