@@ -55,3 +55,12 @@ boot
 
 exit 0
 ```
+
+## TODO
+
+- Wireguard
+- VLANs
+- DDNS
+- Dynamic Firewall
+- Fail2Ban
+- DNS (unbound)
