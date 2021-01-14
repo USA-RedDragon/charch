@@ -3,7 +3,9 @@ Name=wan
 
 [Network]
 DHCP=yes
-IPv6PrivacyExtensions=yes
+IPv6PrivacyExtensions=kernel
+IPv6DuplicateAddressDetection=1
+Ipv6AcceptRA=yes
 
 [DHCP]
 RouteMetric=512
