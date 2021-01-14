@@ -1,25 +1,7 @@
 #!/usr/bin/ash
 
 run_hook() {
-	# Only allow out
-	iptables -P INPUT DROP
-	iptables -P FORWARD DROP
-	iptables -P OUTPUT ACCEPT
-
-	ip6tables -P INPUT DROP
-	ip6tables -P FORWARD DROP
-	ip6tables -P OUTPUT ACCEPT
-
-	# Accept on localhost
-	iptables -A INPUT -i lo -j ACCEPT
-	iptables -A OUTPUT -o lo -j ACCEPT
-
-	ip6tables -A INPUT -i lo -j ACCEPT
-	ip6tables -A OUTPUT -o lo -j ACCEPT
-
-	# Allow established sessions to receive traffic
-	iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-	ip6tables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+	nft flush ruleset ';' include '"/etc/nftables.conf"'
 }
 
 # vim: ai ts=4 sw=4 ft=sh:

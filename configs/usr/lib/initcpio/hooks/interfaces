@@ -25,14 +25,6 @@ run_hook() {
 	ip addr add 192.168.1.1/24 dev lan
 	ip route add 192.168.1.0/24 dev lan
 	ip link set lan up
-
-	iptables -F
-	iptables -t nat -A POSTROUTING ! -d 192.168.1.1/24 -o wan -j MASQUERADE
-	iptables -P INPUT ACCEPT
-	iptables -P FORWARD ACCEPT
-
-	iptables -A INPUT -i wan -j DROP
-	ip6tables -A INPUT -i wan -j DROP
 }
 
 # vim: ai ts=4 sw=4 ft=sh:
