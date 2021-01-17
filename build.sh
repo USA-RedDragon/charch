@@ -26,6 +26,8 @@ mkdir -p artifacts/image/live
 
 FS_TMP_DIR=$(mktemp -d)
 tar -C ${FS_TMP_DIR} -xf artifacts/charch-rootfs-ahead.tar
+rm -rf ${FS_TMP_DIR}/etc/resolv.conf
+ln -sf /run/systemd/resolve/resolv.conf ${FS_TMP_DIR}/etc/resolv.conf
 mksquashfs ${FS_TMP_DIR} artifacts/image/live/filesystem.squashfs -comp zstd -Xcompression-level 22 -exit-on-error -progress
 rm -rf ${FS_TMP_DIR} artifacts/charch-rootfs-ahead.tar
 # sha512sum artifacts/charch-rootfs-ahead.zstd.sqfs > artifacts/charch-rootfs-ahead.zstd.sqfs.sha512sum
