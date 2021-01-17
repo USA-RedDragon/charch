@@ -14,11 +14,13 @@ PXE-bootable Arch Linux-based OS setup for a home router
 - IPv6 compatible
 - DNS over TLS (unbound, eventually)
 - DHCPv6 (radvd, eventually)
-- DHCPd (ISC, eventually)
+- DHCPd (ISC)
 - BGP (gobgpd, eventually)
 - Wireguard (eventually)
 - QEMU guest agent
 - Live ISO booting
+- DDNS
+- Dynamic Firewall (for NAT reflection) <https://github.com/USA-RedDragon/redwall>
 
 ## Requirements
 
@@ -60,7 +62,5 @@ exit 0
 
 - Wireguard
 - VLANs
-- DDNS
-- Dynamic Firewall
 - Fail2Ban
 - DNS (unbound)
