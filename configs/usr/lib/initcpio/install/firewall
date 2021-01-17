@@ -5,6 +5,7 @@ build() {
 	add_all_modules '/netfilter/nft_*'
 	add_all_modules '/netfilter/nf_tables*'
 	add_file /etc/nftables.conf
+	add_file /etc/nftables/public_ip.nft
 	add_binary /usr/bin/nft
 }
 
