@@ -1,3 +1,5 @@
+FROM jamcswain/redwall as firewall
+
 FROM archlinux:base
 
 RUN pacman -Sy \
@@ -31,7 +33,8 @@ RUN mkdir /tmp/bgp \
     && mv -v /tmp/bgp/gobgp /usr/bin/gobgp \
     && mv -v /tmp/bgp/gobgpd /usr/bin/gobgpd \
     && rm -rf /tmp/bgp
-    
+
+COPY --from=firewall /redwall /usr/bin/redwall
 COPY configs/ /
 
 RUN ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
@@ -43,5 +46,6 @@ RUN systemctl enable systemd-resolved
 RUN systemctl enable dhcpd4@lan
 RUN systemctl enable dhcpd6@lan
 RUN systemctl enable radvd
+RUN systemctl enable redwall
 
 RUN rm -rf /boot/*
