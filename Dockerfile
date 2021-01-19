@@ -44,8 +44,8 @@ RUN systemctl enable qemu-guest-agent
 RUN systemctl enable systemd-networkd
 RUN systemctl enable systemd-resolved
 RUN systemctl enable dhcpd4@lan
-RUN systemctl enable dhcpd6@lan
-RUN systemctl enable radvd
+# RUN systemctl enable dhcpd6@lan
+# RUN systemctl enable radvd
 RUN systemctl enable redwall
 
 RUN rm -rf /boot/*
