@@ -35,6 +35,8 @@ RUN wget -O /usr/bin/dhcpd-leases-exporter \
 COPY --from=firewall /redwall /usr/bin/redwall
 COPY configs/ /
 
+RUN cd /usr/bin/ && setcap CAP_NET_ADMIN,CAP_SYS_ADMIN+ep nftables_exporter+ep nftables_exporter
+
 RUN ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
 
 RUN systemctl enable sshd
