@@ -28,11 +28,9 @@ RUN pacman -Syyu \
         nano \
         --needed --noconfirm
 
-RUN mkdir /tmp/bgp \
-    && curl -fSsL https://github.com/osrg/gobgp/releases/download/v2.23.0/gobgp_2.23.0_linux_amd64.tar.gz -o - | tar -xz -C /tmp/bgp \
-    && mv -v /tmp/bgp/gobgp /usr/bin/gobgp \
-    && mv -v /tmp/bgp/gobgpd /usr/bin/gobgpd \
-    && rm -rf /tmp/bgp
+RUN wget -O /usr/bin/dhcpd-leases-exporter \
+        https://github.com/DRuggeri/dhcpd_leases_exporter/releases/download/v0.2.0/dhcpd_leases_exporter-v0.2.0-linux-amd64 \
+    && chmod a+x /usr/bin/dhcpd-leases-exporter
 
 COPY --from=firewall /redwall /usr/bin/redwall
 COPY configs/ /
@@ -47,5 +45,6 @@ RUN systemctl enable dhcpd4@lan
 # RUN systemctl enable dhcpd6@lan
 # RUN systemctl enable radvd
 RUN systemctl enable redwall
+RUN systemctl enable dhcpd-exporter
 
 RUN rm -rf /boot/*
