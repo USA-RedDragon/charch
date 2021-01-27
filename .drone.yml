@@ -1,0 +1,16 @@
+kind: pipeline
+type: kubernetes
+name: default
+
+steps:
+- name: publish
+  image: banzaicloud/drone-kaniko
+  settings:
+    registry: harbor.mcswain.dev
+    repo: harbor.mcswain.dev/charch/rootfs
+    tags: ${DRONE_COMMIT_SHA}
+    cache: true
+    username:
+      from_secret: charch-username
+    password:
+      from_secret: charch-password
