@@ -4,7 +4,7 @@ name: default
 
 steps:
 - name: publish
-  image: banzaicloud/drone-kaniko
+  image: plugins/kaniko
   settings:
     registry: harbor.mcswain.dev
     repo: harbor.mcswain.dev/charch/rootfs
