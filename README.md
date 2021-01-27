@@ -1,5 +1,9 @@
 # charch
 
+
+[![Build Status](https://drone.mcswain.dev/api/badges/USA-RedDragon/charch/status.svg)](https://drone.mcswain.dev/USA-RedDragon/charch)
+
+
 ## What is it
 
 PXE-bootable Arch Linux-based OS setup for a home router
