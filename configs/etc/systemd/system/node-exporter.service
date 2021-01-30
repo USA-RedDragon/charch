@@ -1,0 +1,21 @@
+[Unit]
+Description=Node Exporter
+After=network.target network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/node-exporter --web.listen-address=0.0.0.0:9100
+ProtectHome=on
+ProtectSystem=full
+KillSignal=SIGINT
+# We pull in network-online.target for a configured network connection.
+# However this is not guaranteed to be the network connection our
+# networks are configured for. So try to restart on failure with a delay
+# of two seconds. Rate limiting kicks in after 12 seconds.
+RestartSec=2s
+Restart=on-failure
+StartLimitInterval=12s
+
+[Install]
+WantedBy=multi-user.target
