@@ -32,6 +32,22 @@ RUN wget -O /usr/bin/dhcpd-leases-exporter \
         https://github.com/DRuggeri/dhcpd_leases_exporter/releases/download/v0.2.0/dhcpd_leases_exporter-v0.2.0-linux-amd64 \
     && chmod a+x /usr/bin/dhcpd-leases-exporter
 
+RUN mkdir /tmp/adguard \
+    && mkdir -p /var/lib/adguardhome/ \
+    && groupadd adguardhome \
+    && useradd -r -s /usr/bin/nologin -g adguardhome adguardhome \
+    && chown -R adguardhome:adguardhome /var/lib/adguardhome/ \
+    && wget -O /tmp/adguard/release.tgz https://static.adguard.com/adguardhome/release/AdGuardHome_linux_amd64.tar.gz \
+    && cd /tmp/adguard \
+    && tar -xvf release.tgz \
+    && mv AdGuardHome/AdGuardHome /var/lib/adguardhome/AdGuardHome \
+    && cd - \
+    && rm -rf /tmp/adguard
+
+RUN wget -O /usr/bin/adguard-exporter \
+        https://github.com/ebrianne/adguard-exporter/releases/latest/download/adguard_exporter-linux-amd64 \
+    && chmod a+x /usr/bin/adguard-exporter
+
 RUN pacman -S go git make gcc --needed --noconfirm \
     && git clone https://github.com/prometheus/node_exporter.git /tmp/node_exporter \
     && cd /tmp/node_exporter \
@@ -56,5 +72,7 @@ RUN systemctl enable dhcpd4@lan
 RUN systemctl enable redwall
 RUN systemctl enable dhcpd-exporter
 RUN systemctl enable node-exporter
+RUN systemctl enable adguardhome
+RUN systemctl enable adguard-exporter
 
 RUN rm -rf /boot/*
