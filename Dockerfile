@@ -32,18 +32,6 @@ RUN wget -O /usr/bin/dhcpd-leases-exporter \
         https://github.com/DRuggeri/dhcpd_leases_exporter/releases/download/v0.2.0/dhcpd_leases_exporter-v0.2.0-linux-amd64 \
     && chmod a+x /usr/bin/dhcpd-leases-exporter
 
-RUN mkdir /tmp/adguard \
-    && mkdir -p /var/lib/adguardhome/ \
-    && groupadd adguardhome \
-    && useradd -r -s /usr/bin/nologin -g adguardhome adguardhome \
-    && chown -R adguardhome:adguardhome /var/lib/adguardhome/ \
-    && wget -O /tmp/adguard/release.tgz https://static.adguard.com/adguardhome/release/AdGuardHome_linux_amd64.tar.gz \
-    && cd /tmp/adguard \
-    && tar -xvf release.tgz \
-    && mv AdGuardHome/AdGuardHome /var/lib/adguardhome/AdGuardHome \
-    && cd - \
-    && rm -rf /tmp/adguard
-
 RUN wget -O /usr/bin/adguard-exporter \
         https://github.com/ebrianne/adguard-exporter/releases/latest/download/adguard_exporter-linux-amd64 \
     && chmod a+x /usr/bin/adguard-exporter
@@ -59,6 +47,18 @@ RUN pacman -S go git make gcc --needed --noconfirm \
 
 COPY --from=firewall /redwall /usr/bin/redwall
 COPY configs/ /
+
+RUN mkdir /tmp/adguard \
+    && mkdir -p /var/lib/adguardhome/ \
+    && groupadd adguardhome \
+    && useradd -r -s /usr/bin/nologin -g adguardhome adguardhome \
+    && wget -O /tmp/adguard/release.tgz https://static.adguard.com/adguardhome/release/AdGuardHome_linux_amd64.tar.gz \
+    && cd /tmp/adguard \
+    && tar -xvf release.tgz \
+    && mv AdGuardHome/AdGuardHome /var/lib/adguardhome/AdGuardHome \
+    && cd - \
+    && rm -rf /tmp/adguard \
+    && chown -R adguardhome:adguardhome /var/lib/adguardhome
 
 RUN ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
 
