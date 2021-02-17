@@ -49,6 +49,16 @@ RUN pacman -S go git make gcc --needed --noconfirm \
 COPY --from=firewall /redwall /usr/bin/redwall
 COPY configs/ /
 
+RUN mkdir /tmp/igb-patched \
+    && cd /tmp/igb-patched \
+    && wget -O igb.tgz https://downloads.sourceforge.net/projeect/e1000/igb%20stable/5.5.2/igb-5.5.2.tar.gz \
+    && tar -xvf igb.tgz \
+    && rm -f igb.tgz \
+    && cd */src \
+    && patch ./e1000_nvm.c /etc/igb_nocsum.patch \
+    && make -j`nproc` install \
+    && rm -rf /tmp/igb-patched
+
 RUN mkdir /tmp/adguard \
     && mkdir -p /var/lib/adguardhome/ \
     && groupadd adguardhome \

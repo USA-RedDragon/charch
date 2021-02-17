@@ -1,0 +1,29 @@
+--- igb-5.5.2/src/e1000_nvm.c	2020-12-01 05:32:17.000000000 -0600
++++ /home/reddragon/igb-5.5.2/src/e1000_nvm.c	2021-02-17 09:42:15.758205983 -0600
+@@ -772,26 +772,6 @@
+  **/
+ s32 e1000_validate_nvm_checksum_generic(struct e1000_hw *hw)
+ {
+-	s32 ret_val;
+-	u16 checksum = 0;
+-	u16 i, nvm_data;
+-
+-	DEBUGFUNC("e1000_validate_nvm_checksum_generic");
+-
+-	for (i = 0; i < (NVM_CHECKSUM_REG + 1); i++) {
+-		ret_val = hw->nvm.ops.read(hw, i, 1, &nvm_data);
+-		if (ret_val) {
+-			DEBUGOUT("NVM Read Error\n");
+-			return ret_val;
+-		}
+-		checksum += nvm_data;
+-	}
+-
+-	if (checksum != (u16) NVM_SUM) {
+-		DEBUGOUT("NVM Checksum Invalid\n");
+-		return -E1000_ERR_NVM;
+-	}
+-
+ 	return E1000_SUCCESS;
+ }
+ 
