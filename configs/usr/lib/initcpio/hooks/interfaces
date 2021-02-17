@@ -5,9 +5,6 @@ run_hook() {
 	wan_hwaddr="${wan_hwaddr}"
 	lan_hwaddr="${lan_hwaddr}"
 
-	cat /proc/net/dev | grep -q wan || echo 'No wan interface. Rebooting' && reboot -f
-	cat /proc/net/dev | grep -q lan || echo 'No lan interface. Rebooting' && reboot -f
-
 	wan_oldname=$(ip -br link | awk "\$3 ~ /${lan_hwaddr}/ {print \$1}")
 	lan_oldname=$(ip -br link | awk "\$3 ~ /${wan_hwaddr}/ {print \$1}")
 
