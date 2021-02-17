@@ -4,6 +4,7 @@ FROM archlinux:base
 
 RUN pacman -Sy \
         reflector \
+        glibc \
         --needed --noconfirm \
     && reflector --country US --age 12 --protocol https --ipv4 --ipv6 --sort rate --save /etc/pacman.d/mirrorlist 
 
