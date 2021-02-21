@@ -29,9 +29,6 @@ ip link set ${lan_oldname} name lan
 ip addr add 192.168.1.1/24 dev lan
 ip route add 192.168.1.0/24 dev lan
 
-cat /proc/net/dev | grep -q lan || echo 'No lan interface. Rebooting' && reboot -f
-cat /proc/net/dev | grep -q wan || echo 'No wan interface. Rebooting' && reboot -f
-
 # Firewall
 modprobe nf_tables
 nft -f /etc/nftables.conf
