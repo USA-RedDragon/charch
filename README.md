@@ -1,8 +1,6 @@
 # charch
 
-
 [![Build Status](https://drone.mcswain.dev/api/badges/USA-RedDragon/charch/status.svg)](https://drone.mcswain.dev/USA-RedDragon/charch)
-
 
 ## What is it
 
@@ -10,8 +8,7 @@ PXE-bootable Arch Linux-based OS setup for a home router
 
 ## Features
 
-- Squashfs rootfs (zstd compress)
-- Overlayfs root (diskless)
+- Lives in initramfs. No need for a persistent disk.
 - Early firewall start
 - UFW for easy firewall configuration
 - OpenSSH configured for pubkey auth
@@ -34,6 +31,7 @@ PXE-bootable Arch Linux-based OS setup for a home router
 - awk, sed, and grep probably
 - xorriso
 - syslinux
+- cpio
 
 ## Building
 
@@ -54,7 +52,7 @@ This can be iPXE booted via:
 
 set squash_url ${local_assets}/charch/rootfs-ahead.zstd.sqfs
 
-kernel ${local_assets}/charch/vmlinuz-ahead squashfs=${squash_url} ip=dhcp overlayroot
+kernel ${local_assets}/charch/vmlinuz-ahead squashfs=${squash_url} root=/dev/ram0 rw rdinit=/sbin/init console=ttyS0 lan_hwaddr=MAC_ADDR_OF_LAN wan_hwaddr=MAC_ADDR_OF_WAN
 initrd ${local_assets}/charch/initramfs-ahead.zstd.img
 boot
 

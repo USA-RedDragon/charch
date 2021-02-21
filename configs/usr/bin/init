@@ -1,0 +1,41 @@
+#!/bin/bash
+
+set -ax
+
+# Read relevant bits from cmdline
+read -r cmdline < /proc/cmdline
+
+for param in $cmdline ; do
+  case $param in
+    wan_hwaddr=*      ) wan_hwaddr=${param#wan_hwaddr=}             ;;
+    lan_hwaddr=*      ) lan_hwaddr=${param#lan_hwaddr=}             ;;
+  esac
+done
+
+# Rename interfaces
+modprobe e1000
+modprobe igb
+
+wan_oldname=$(ip -br link | awk "\$3 ~ /${lan_hwaddr}/ {print \$1}")
+lan_oldname=$(ip -br link | awk "\$3 ~ /${wan_hwaddr}/ {print \$1}")
+
+ip link set ${wan_oldname} down
+ip link set ${wan_oldname} name wan
+
+ip link set ${lan_oldname} down
+ip link set ${lan_oldname} name lan
+ip addr add 192.168.1.1/24 dev lan
+ip route add 192.168.1.0/24 dev lan
+
+cat /proc/net/dev | grep -q lan || echo 'No lan interface. Rebooting' && reboot -f
+cat /proc/net/dev | grep -q wan || echo 'No wan interface. Rebooting' && reboot -f
+
+# Firewall
+modprobe nf_tables
+nft -f /etc/nftables.conf
+
+# Bring up interfaces
+ip link set wan up
+ip link set lan up
+
+exec /lib/systemd/systemd "$@"

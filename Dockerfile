@@ -2,13 +2,16 @@ FROM jamcswain/redwall as firewall
 
 FROM archlinux:base
 
-RUN pacman -Sy \
+RUN pacman -Syv \
         reflector \
         glibc \
         --needed --noconfirm \
-    && reflector --verbose --country US --age 12 --protocol https --ipv4 --ipv6 --sort rate --save /etc/pacman.d/mirrorlist 
+    && reflector --verbose --country US --age 12 --protocol https --ipv4 --ipv6 --sort rate --save /etc/pacman.d/mirrorlist \
+    && pacman -Rv reflector libnsl python --unneeded --noconfirm \
+    && rm -rf /root/.cache \
+    && rm -rf /var/cache/pacman/pkg/*
 
-RUN pacman -Syyu \
+RUN pacman -Syyvu \
         unbound \
         openresolv \
         dhcp \
@@ -27,45 +30,55 @@ RUN pacman -Syyu \
         openssh \
         qemu-guest-agent \
         nano \
-        --needed --noconfirm
+        --needed --noconfirm \
+    && rm -rf /var/cache/pacman/pkg/*
 
-RUN wget -O /usr/bin/dhcpd-leases-exporter \
+RUN wget --no-hsts -O /usr/bin/dhcpd-leases-exporter \
         https://github.com/DRuggeri/dhcpd_leases_exporter/releases/download/v0.2.0/dhcpd_leases_exporter-v0.2.0-linux-amd64 \
     && chmod a+x /usr/bin/dhcpd-leases-exporter
 
-RUN wget -O /usr/bin/adguard-exporter \
+RUN wget --no-hsts -O /usr/bin/adguard-exporter \
         https://github.com/ebrianne/adguard-exporter/releases/latest/download/adguard_exporter-linux-amd64 \
     && chmod a+x /usr/bin/adguard-exporter
 
-RUN pacman -S go git make gcc --needed --noconfirm \
+RUN pacman -Sv go git make gcc --needed --noconfirm \
     && git clone https://github.com/prometheus/node_exporter.git /tmp/node_exporter \
     && cd /tmp/node_exporter \
     && make \
-    && pacman -R go git make gcc --unneeded --noconfirm \
+    && pacman -Rv go git make gcc --unneeded --noconfirm \
     && mv ./node_exporter /usr/bin/node-exporter \
     && cd - \
-    && rm -rf /tmp/node_exporter
+    && rm -rf /tmp/node_exporter \
+    && rm -rf /root/.cache \
+    && rm -rf /root/go \
+    && rm -rf /tmp/go-build* \
+    && rm -rf /var/cache/pacman/pkg/*
 
 COPY --from=firewall /redwall /usr/bin/redwall
 COPY configs/ /
 
-RUN pacman -S base-devel linux-headers --needed --noconfirm \
+# Ensure init can be run
+RUN chmod 755 /usr/bin/init \
+    && chown root:root /usr/bin/init
+
+RUN pacman -Sv base-devel linux-headers --needed --noconfirm \
     && mkdir /tmp/igb-patched \
     && cd /tmp/igb-patched \
-    && wget -O igb.tgz https://downloads.sourceforge.net/project/e1000/igb%20stable/5.5.2/igb-5.5.2.tar.gz \
+    && wget --no-hsts -O igb.tgz https://downloads.sourceforge.net/project/e1000/igb%20stable/5.5.2/igb-5.5.2.tar.gz \
     && tar -xvf igb.tgz \
     && rm -f igb.tgz \
     && cd */src \
     && patch ./e1000_nvm.c /etc/igb_nocsum.patch \
     && make -j`nproc` install \
-    && pacman -R base-devel linux-headers --unneeded --noconfirm \
-    && rm -rf /tmp/igb-patched
+    && pacman -Rv base-devel linux-headers --unneeded --noconfirm \
+    && rm -rf /tmp/igb-patched \
+    && rm -rf /var/cache/pacman/pkg/*
 
 RUN mkdir /tmp/adguard \
     && mkdir -p /var/lib/adguardhome/ \
     && groupadd adguardhome \
     && useradd -r -s /usr/bin/nologin -g adguardhome adguardhome \
-    && wget -O /tmp/adguard/release.tgz https://static.adguard.com/adguardhome/release/AdGuardHome_linux_amd64.tar.gz \
+    && wget --no-hsts -O /tmp/adguard/release.tgz https://static.adguard.com/adguardhome/release/AdGuardHome_linux_amd64.tar.gz \
     && cd /tmp/adguard \
     && tar -xvf release.tgz \
     && mv AdGuardHome/AdGuardHome /var/lib/adguardhome/AdGuardHome \

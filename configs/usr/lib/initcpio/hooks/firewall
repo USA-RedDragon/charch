@@ -1,7 +1,0 @@
-#!/usr/bin/ash
-
-run_hook() {
-	nft -f /etc/nftables.conf
-}
-
-# vim: ai ts=4 sw=4 ft=sh:
