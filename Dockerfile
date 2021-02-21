@@ -2,6 +2,13 @@ FROM jamcswain/redwall as firewall
 
 FROM archlinux:base
 
+# Remove mkinitcpio hooks
+RUN rm -rf \
+    /usr/share/libalpm/hooks/60-mkinitcpio-remove.hook \
+    /usr/share/libalpm/scripts/mkinitcpio-remove \
+    /usr/share/libalpm/hooks/90-mkinitcpio-install.hook \
+    /usr/share/libalpm/scripts/mkinitcpio-install
+
 RUN pacman -Syv \
         reflector \
         glibc \
