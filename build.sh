@@ -44,7 +44,7 @@ SIZE_HINT=$(du -sb | awk '{ print $1 }' | awk '{print int($1*1.02)}')
 # Use fast compression on my laptop
 # High compression elsewhere
 ZSTD_COMPRESSION="--ultra -22"
-if [ $(hostname) = "EdgeOfAges" ]; then
+if [ "$(hostname)" = "EdgeOfAges" ]; then
     ZSTD_COMPRESSION="--fast"
 fi
 
