@@ -2,6 +2,8 @@
 
 set -ax
 
+chmod a+rx /
+
 # Read relevant bits from cmdline
 read -r cmdline < /proc/cmdline
 
