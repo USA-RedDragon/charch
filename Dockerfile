@@ -45,6 +45,7 @@ RUN pacman -Sv go git make gcc --needed --noconfirm \
     && git clone https://github.com/prometheus/node_exporter.git /tmp/node_exporter \
     && cd /tmp/node_exporter \
     && git checkout v1.1.1 \
+    && sed -i 's/diff --exit-code/diff/g' Makefile.common \
     && make \
     && pacman -Rv go git make gcc --unneeded --noconfirm \
     && mv ./node_exporter /usr/bin/node-exporter \
