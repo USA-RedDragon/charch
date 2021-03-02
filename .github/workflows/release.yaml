@@ -1,0 +1,95 @@
+name: Release Charch
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  release:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Build
+        run: scripts/build.sh
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload ISO
+        id: upload-iso
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./charchlive.iso
+          asset_name: charchlive.iso
+          asset_content_type: application/octet-stream
+
+      - name: Upload ISO Checksum
+        id: upload-iso-csum
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./charchlive.iso.sha512sum
+          asset_name: charchlive.iso.sha512sum
+          asset_content_type: text/plain
+
+      - name: Upload Kernel
+        id: upload-kernel
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/image/live/vmlinuz
+          asset_name: vmlinuz
+          asset_content_type: text/octet-stream
+          
+      - name: Upload Kernel Checksum
+        id: upload-kernel-csum
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/image/live/vmlinuz.sha512sum
+          asset_name: vmlinuz.sha512sum
+          asset_content_type: text/plain
+
+      - name: Upload Rootfs/Ramdisk
+        id: upload-ramdisk
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/image/live/initrd
+          asset_name: initrd
+          asset_content_type: text/octet-stream
+          
+      - name: Upload Rootfs/Ramdisk Checksum
+        id: upload-ramdisk-csum
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/image/live/initrd.sha512sum
+          asset_name: initrd.sha512sum
+          asset_content_type: text/plain
