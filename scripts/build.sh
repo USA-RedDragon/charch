@@ -8,7 +8,7 @@ rm -rf artifacts/ charchlive.iso
 mkdir -p ./artifacts
 chmod a+r ./artifacts
 
-source `pwd`/scripts/funcs.sh
+source ./funcs.sh
 
 docker_stop_remove_container ${CONTAINER_ROOTFS_EXPORT} || true
 
@@ -50,12 +50,14 @@ fi
 
 find . | cpio -H newc -o | zstd -T0 -v ${ZSTD_COMPRESSION} --exclude-compressed --size-hint=${SIZE_HINT} > ${OLDPWD}/artifacts/image/live/initrd
 cd ${OLDPWD}
-sha512sum artifacts/image/live/initrd > artifacts/image/live/initrd.sha512sum
-
 rm -rf ${FS_TMP_DIR} artifacts/charch-rootfs-ahead.tar
 
 ./scripts/copy-kernel.sh artifacts/image/live/vmlinuz
-sha512sum artifacts/image/live/vmlinuz > artifacts/image/live/vmlinuz.sha512sum
+
+cd artifacts/image/live/
+sha512sum vmlinuz > vmlinuz.sha512sum
+sha512sum initrd > initrd.sha512sum
+cd ${OLDPWD}
 
 cat << __EOF__ > artifacts/image/isolinux/isolinux.cfg
 UI menu.c32
