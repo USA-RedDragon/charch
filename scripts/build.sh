@@ -8,7 +8,8 @@ rm -rf artifacts/ charchlive.iso
 mkdir -p ./artifacts
 chmod a+r ./artifacts
 
-source ./funcs.sh
+SCRIPTDIR=$(dirname "$(readlink -f "$0")")
+source ${SCRIPTDIR}/funcs.sh
 
 docker_stop_remove_container ${CONTAINER_ROOTFS_EXPORT} || true
 
