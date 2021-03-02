@@ -1,6 +1,6 @@
 # charch
 
-[![Build Status](https://drone.mcswain.dev/api/badges/USA-RedDragon/charch/status.svg)](https://drone.mcswain.dev/USA-RedDragon/charch)
+[![Build Status](https://github.com/USA-RedDragon/charch/actions/workflows/release.yaml/badge.svg)](https://github.com/USA-RedDragon/charch/actions/workflows/release.yaml)
 
 ## What is it
 
@@ -37,9 +37,9 @@ PXE-bootable Arch Linux-based OS setup for a home router
 
 A set of artifacts and their sha512 checksums including:
 
-* the rootfs
-* the initramfs
-* and the kernel
+- the rootfs
+- the initramfs
+- and the kernel
 
 will be generated in the artifacts folder by running `sudo ./build.sh`
 
