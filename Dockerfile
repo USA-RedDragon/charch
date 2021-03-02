@@ -51,6 +51,7 @@ RUN wget --no-hsts -O /usr/bin/adguard-exporter \
 RUN pacman -Sv go git make gcc --needed --noconfirm \
     && git clone https://github.com/prometheus/node_exporter.git /tmp/node_exporter \
     && cd /tmp/node_exporter \
+    && git checkout v1.1.1 \
     && make \
     && pacman -Rv go git make gcc --unneeded --noconfirm \
     && mv ./node_exporter /usr/bin/node-exporter \
