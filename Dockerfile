@@ -9,15 +9,6 @@ RUN rm -rf \
     /usr/share/libalpm/hooks/90-mkinitcpio-install.hook \
     /usr/share/libalpm/scripts/mkinitcpio-install
 
-RUN pacman -Syv \
-        reflector \
-        glibc \
-        --needed --noconfirm \
-    && reflector --verbose --country US --age 12 --protocol https --ipv4 --ipv6 --sort rate --save /etc/pacman.d/mirrorlist \
-    && pacman -Rv reflector libnsl python --unneeded --noconfirm \
-    && rm -rf /root/.cache \
-    && rm -rf /var/cache/pacman/pkg/*
-
 RUN pacman -Syyvu \
         unbound \
         openresolv \
