@@ -9,6 +9,8 @@ RUN rm -rf \
     /usr/share/libalpm/hooks/90-mkinitcpio-install.hook \
     /usr/share/libalpm/scripts/mkinitcpio-install
 
+COPY configs/etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist
+
 RUN pacman -Syyvu \
         unbound \
         openresolv \
