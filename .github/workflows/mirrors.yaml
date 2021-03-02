@@ -1,0 +1,34 @@
+name: Mirrors
+
+on:
+  schedule:
+  - cron: "0 0,5,11,17 * * *"
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      
+    - name: Get Mirrors
+      run: |
+        docker run -i --log-driver=none -a stdin -a stdout -a stderr jamcswain/arch-reflector:1.0.0 --verbose --country US --age 12 --protocol https --ipv4 --ipv6 --sort rate --save /dev/stdout > configs/etc/pacman.d/mirrorlist
+
+    - name: Check Mirrors
+      run: |
+        check=`cat configs/etc/pacman.d/mirrorlist | grep 'Server = https://' | wc -l`
+
+        # ensure > 3 mirrors found
+        if [ "$check" -lt 3 ]
+        then
+        exit 2
+        fi
+
+    - name: Commit Mirrors
+      run: |
+        git config --local user.email "jacob@mcswain.dev"
+        git config --local user.name "Jacob McSwain"
+        git add configs/etc/pacman.d/mirrorlist
+        git commit --signoff -m "Update Mirrorlist"
+        git push
