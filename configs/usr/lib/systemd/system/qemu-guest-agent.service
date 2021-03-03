@@ -6,6 +6,7 @@ Restart=Always
 RestartSec=5
 ExecStart=/usr/bin/qemu-ga
 ExecStartPre=/bin/sleep 5m
+TimeoutSec=900
 
 [Install]
 WantedBy=multi-user.target
