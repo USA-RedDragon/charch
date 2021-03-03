@@ -13,6 +13,8 @@ source ${SCRIPTDIR}/funcs.sh
 
 docker_stop_remove_container ${CONTAINER_ROOTFS_EXPORT} || true
 
+docker pull archlinux:base
+docker pull jamcswain/redwall
 docker build -t jamcswain/charch:ahead . --no-cache
 
 docker run -d --name ${CONTAINER_ROOTFS_EXPORT} jamcswain/charch:ahead sleep infinity
