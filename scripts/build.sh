@@ -78,7 +78,7 @@ label Charch
     append initrd=/live/initrd root=/dev/ram0 rw rdinit=/sbin/init console=ttyS0 lan_hwaddr=00:1b:22:76:28:02 wan_hwaddr=00:1b:22:76:28:03
 __EOF__
 
-SYSLINUX_MODULE_DIR=$(dirname `find /usr/lib/syslinux/ -type d -name bios | head -n1`)
+SYSLINUX_MODULE_DIR=$(dirname `find /usr/lib/syslinux/ -type f -name ldlinux.c32 | head -n1`)
 cp -v -r ${SYSLINUX_MODULE_DIR}/* artifacts/image/isolinux/
 cp -v `find /usr/lib/ -type f -name isolinux.bin | head -n1` artifacts/image/isolinux/
 xorriso -as mkisofs -r -J -joliet-long -l -cache-inodes -isohybrid-mbr `find /usr/lib/ -type f -name isohdpfx.bin | head -n1` -partition_offset 16 -A "Charch" -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o charchlive.iso artifacts/image
