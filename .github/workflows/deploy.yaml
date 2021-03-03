@@ -24,9 +24,13 @@ jobs:
       - name: Place sensitive configs in place
         id: add-creds
         run: |
-          echo ${ADGUARD_EXPORTER} | base64 -d > configs/etc/default/adguard-exporter
-          echo ${REDWALL} | base64 -d > configs/etc/default/redwall
-          echo ${ADGUARD_HOME} | base64 -d > configs/var/lib/adguardhome/AdGuardHome.yaml
+          echo "${ADGUARD_EXPORTER}" | base64 -d > configs/etc/default/adguard-exporter
+          echo "${REDWALL}" | base64 -d > configs/etc/default/redwall
+          echo "${ADGUARD_HOME}" | base64 -d > configs/var/lib/adguardhome/AdGuardHome.yaml
+        env:
+          ADGUARD_EXPORTER: ${{ secrets.ADGUARD_EXPORTER }}
+          REDWALL: ${{ secrets.REDWALL }}
+          ADGUARD_HOME: ${{ secrets.ADGUARD_HOME }}
 
       - name: Build for deploy
         run: scripts/build.sh
@@ -35,8 +39,18 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan 192.168.1.25 >> ~/.ssh/known_hosts
-          echo "${ISO_COPY_PRIVATE_KEY}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
-          scp -v charchlive.iso root@192.168.1.25:/var/lib/vz/template/iso/charchlive-firewall.iso
-          ssh -v root@192.168.1.25 qm reboot 107
+          echo "${ISO_COPY_PRIVATE_KEY}" > ~/.ssh/id_iso_copy
+          chmod 600 ~/.ssh/id_iso_copy
+          ssh-keygen -y -f ~/.ssh/id_iso_copy > ~/.ssh/id_iso_copy.pub
+          cat >> ~/.ssh/config <<END
+          Host pxe
+            HostName ${SSH_HOST}
+            User ${SSH_USER}
+            IdentityFile ~/.ssh/id_iso_copy
+          END
+          scp charchlive.iso pxe:/var/lib/vz/template/iso/charchlive-firewall.iso
+          ssh pxe qm reboot 107
+        env:
+          SSH_USER: ${{ secrets.ISO_COPY_USER }}
+          ISO_COPY_PRIVATE_KEY: ${{ secrets.ISO_COPY_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.ISO_COPY_SSH_HOST }}
