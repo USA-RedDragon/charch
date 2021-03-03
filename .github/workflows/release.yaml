@@ -31,7 +31,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.run_number }}
-          release_name: Run #${{ github.run_number }}: ${{ github.sha }}
+          release_name: "Run #${{ github.run_number }}: ${{ github.sha }}"
           draft: false
           prerelease: false
 
