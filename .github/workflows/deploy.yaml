@@ -35,8 +35,8 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan 192.168.1.25 >> ~/.ssh/known_hosts
-          echo "${ISO_COPY_PRIVATE_KEY}" > ~/.ssh/id_iso_copy
-          ssh-keygen -y -f ~/.ssh/id_iso_copy > ~/.ssh/id_iso_copy.pub
-          chmod 600 ~/.ssh/id_iso_copy
-          scp -i ~/.ssh/id_iso_copy charchlive.iso root@192.168.1.25:/var/lib/vz/template/iso/charchlive-firewall.iso
-          ssh -i ~/.ssh/id_iso_copy root@192.168.1.25 qm reboot 107
+          echo "${ISO_COPY_PRIVATE_KEY}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
+          scp -v charchlive.iso root@192.168.1.25:/var/lib/vz/template/iso/charchlive-firewall.iso
+          ssh -v root@192.168.1.25 qm reboot 107
