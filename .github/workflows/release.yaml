@@ -111,19 +111,11 @@ jobs:
       - name: Build for release
         run: scripts/build.sh
 
-      - name: Authorize SSH
+      - name: Copy artifact to PXE server and deploy
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan 192.168.1.25 >> ~/.ssh/known_hosts
           echo ${ISO_COPY_PRIVATE_KEY} | base64 -d > ~/.ssh/id_iso_copy
           chmod 400 ~/.ssh/id_iso_copy
-
-      - name: Copy artifact to PXE server
-        id: copy-iso
-        run: |
           scp -i ~/.ssh/id_iso_copy charchlive.iso root@192.168.1.25:/var/lib/vz/template/iso/charchlive-firewall.iso
-
-      - name: Copy artifact to PXE server
-        id: restart-router
-        run: |
-          ssh -i ~/.ssh/id_iso_copy charchlive.iso root@192.168.1.25 qm reboot 107
+          ssh -i ~/.ssh/id_iso_copy root@192.168.1.25 qm reboot 107
