@@ -100,7 +100,7 @@ jobs:
           asset_content_type: text/plain
 
       - name: Place sensitive configs in place
-        id: copy-iso
+        id: add-creds
         run: |
           echo ${ADGUARD_EXPORTER} | base64 -d > configs/etc/default/adguard-exporter
           echo ${REDWALL} | base64 -d > configs/etc/default/redwall
