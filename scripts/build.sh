@@ -2,6 +2,21 @@
 
 set -xe
 
+DOCKER_BUILD_ARGS="--no-cache"
+
+while test $# -gt 0
+do
+  case "$1" in
+    --use-cache) DOCKER_BUILD_ARGS=""
+        ;;
+    --*) echo "bad option $1"
+        ;;
+    *) echo "argument $1"
+        ;;
+  esac
+  shift
+done
+
 CONTAINER_ROOTFS_EXPORT=charch-rootfs-sleep
 
 rm -rf artifacts/ charchlive.iso
@@ -15,7 +30,7 @@ docker_stop_remove_container ${CONTAINER_ROOTFS_EXPORT} || true
 
 docker pull archlinux:base
 docker pull jamcswain/redwall
-docker build -t jamcswain/charch:ahead . --no-cache
+docker build -t jamcswain/charch:ahead . ${DOCKER_BUILD_ARGS}
 
 docker run -d --name ${CONTAINER_ROOTFS_EXPORT} jamcswain/charch:ahead sleep infinity
 
