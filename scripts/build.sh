@@ -42,7 +42,7 @@ cd ${FS_TMP_DIR}
 # Sizes around this commit, not sure why DU is higher than the cpio file size
 # cpio 1505546240
 # du   1512420613
-SIZE_HINT=$(du -sb | awk '{ print $1 }' | awk '{print int($1*1.02)}')
+SIZE_HINT=$(sudo du -sb | awk '{ print $1 }' | awk '{print int($1*1.02)}')
 
 # Use fast compression on my laptop
 # High compression elsewhere
