@@ -98,3 +98,8 @@ jobs:
           asset_path: ./artifacts/image/live/initrd.sha512sum
           asset_name: initrd.sha512sum
           asset_content_type: text/plain
+
+      - name: Copy artifact to PXE server
+        id: copy-iso
+        run: |
+          scp charchlive.iso root@192.168.1.25:/var/lib/vz/template/iso/charchlive-firewall.iso
