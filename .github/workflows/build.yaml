@@ -17,5 +17,10 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install build dependencies
+        run: |
+          apt update
+          apt install -y cpio zstd xorriso syslinux syslinux-common isolinux
+
       - name: Build
         run: scripts/build.sh
