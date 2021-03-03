@@ -51,7 +51,7 @@ if [ "$(hostname)" = "EdgeOfAges" ]; then
     ZSTD_COMPRESSION="--fast"
 fi
 
-find . | cpio -H newc -o | zstd -T0 -v ${ZSTD_COMPRESSION} --exclude-compressed --size-hint=${SIZE_HINT} > ${OLDPWD}/artifacts/image/live/initrd
+sudo find . | sudo cpio -H newc -o | zstd -T0 -v ${ZSTD_COMPRESSION} --exclude-compressed --size-hint=${SIZE_HINT} > ${OLDPWD}/artifacts/image/live/initrd
 cd ${OLDPWD}
 rm -rf artifacts/charch-rootfs-ahead.tar
 rm -rf ${FS_TMP_DIR} || true
