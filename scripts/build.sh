@@ -15,7 +15,7 @@ docker_stop_remove_container ${CONTAINER_ROOTFS_EXPORT} || true
 
 docker pull archlinux:base
 docker pull jamcswain/redwall
-docker build -t jamcswain/charch:ahead . --no-cache
+docker build -t jamcswain/charch:ahead .
 
 docker run -d --name ${CONTAINER_ROOTFS_EXPORT} jamcswain/charch:ahead sleep infinity
 
@@ -29,11 +29,11 @@ mkdir -p artifacts/image/live
 
 FS_TMP_DIR=$(mktemp -d)
 OLDPWD=$(pwd)
-tar -C ${FS_TMP_DIR} -xf artifacts/charch-rootfs-ahead.tar
+sudo tar -C ${FS_TMP_DIR} -xf artifacts/charch-rootfs-ahead.tar
 
 # Fix DNS resolution from Docker back to systemd
-rm -rf ${FS_TMP_DIR}/etc/resolv.conf
-ln -sf /run/systemd/resolve/resolv.conf ${FS_TMP_DIR}/etc/resolv.conf
+sudo rm -rf ${FS_TMP_DIR}/etc/resolv.conf
+sudo ln -sf /run/systemd/resolve/resolv.conf ${FS_TMP_DIR}/etc/resolv.conf
 
 cd ${FS_TMP_DIR}
 # Size hint is better overesitmated than underestimated, and we can't easily
@@ -54,7 +54,7 @@ fi
 sudo find . | sudo cpio -H newc -o | zstd -T0 -v ${ZSTD_COMPRESSION} --exclude-compressed --size-hint=${SIZE_HINT} > ${OLDPWD}/artifacts/image/live/initrd
 cd ${OLDPWD}
 rm -rf artifacts/charch-rootfs-ahead.tar
-rm -rf ${FS_TMP_DIR} || true
+sudo rm -rf ${FS_TMP_DIR}
 
 ./scripts/copy-kernel.sh artifacts/image/live/vmlinuz
 
