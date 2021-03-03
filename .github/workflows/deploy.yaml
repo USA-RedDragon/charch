@@ -48,8 +48,8 @@ jobs:
             User ${SSH_USER}
             IdentityFile ~/.ssh/id_iso_copy
           END
-          scp charchlive.iso pxe:/var/lib/vz/template/iso/charchlive-firewall.iso
-          ssh pxe qm reset 107
+          scp -v charchlive.iso pxe:/var/lib/vz/template/iso/charchlive-firewall.iso
+          ssh -v pxe qm reboot 107
         env:
           SSH_USER: ${{ secrets.ISO_COPY_USER }}
           ISO_COPY_PRIVATE_KEY: ${{ secrets.ISO_COPY_PRIVATE_KEY }}
