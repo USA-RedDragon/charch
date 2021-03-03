@@ -9,7 +9,7 @@ on:
 
 jobs:
   release:
-    runs-on: self-hosted
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -100,22 +100,3 @@ jobs:
           asset_path: ./artifacts/image/live/initrd.sha512sum
           asset_name: initrd.sha512sum
           asset_content_type: text/plain
-
-      - name: Place sensitive configs in place
-        id: add-creds
-        run: |
-          echo ${ADGUARD_EXPORTER} | base64 -d > configs/etc/default/adguard-exporter
-          echo ${REDWALL} | base64 -d > configs/etc/default/redwall
-          echo ${ADGUARD_HOME} | base64 -d > configs/var/lib/adguardhome/AdGuardHome.yaml
-
-      - name: Build for release
-        run: scripts/build.sh
-
-      - name: Copy artifact to PXE server and deploy
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan 192.168.1.25 >> ~/.ssh/known_hosts
-          echo ${ISO_COPY_PRIVATE_KEY} | base64 -d > ~/.ssh/id_iso_copy
-          chmod 600 ~/.ssh/id_iso_copy
-          scp -i ~/.ssh/id_iso_copy charchlive.iso root@192.168.1.25:/var/lib/vz/template/iso/charchlive-firewall.iso
-          ssh -i ~/.ssh/id_iso_copy root@192.168.1.25 qm reboot 107

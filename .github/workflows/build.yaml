@@ -1,4 +1,4 @@
-name: Tesh Charch Build
+name: Test Charch Build
 
 on:
   pull_request:

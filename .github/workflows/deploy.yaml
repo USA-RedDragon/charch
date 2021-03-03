@@ -1,0 +1,41 @@
+name: Deploy Charch in LAN
+
+on:
+  push:
+    branches:
+      - master
+  schedule:
+  - cron: "0 1,6,12,18 * * *"
+
+jobs:
+  release:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install build dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y cpio zstd xorriso syslinux syslinux-common isolinux
+
+      - name: Place sensitive configs in place
+        id: add-creds
+        run: |
+          echo ${ADGUARD_EXPORTER} | base64 -d > configs/etc/default/adguard-exporter
+          echo ${REDWALL} | base64 -d > configs/etc/default/redwall
+          echo ${ADGUARD_HOME} | base64 -d > configs/var/lib/adguardhome/AdGuardHome.yaml
+
+      - name: Build for deploy
+        run: scripts/build.sh
+
+      - name: Copy artifact to PXE server and deploy
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan 192.168.1.25 >> ~/.ssh/known_hosts
+          echo ${ISO_COPY_PRIVATE_KEY} | base64 -d > ~/.ssh/id_iso_copy
+          chmod 600 ~/.ssh/id_iso_copy
+          scp -i ~/.ssh/id_iso_copy charchlive.iso root@192.168.1.25:/var/lib/vz/template/iso/charchlive-firewall.iso
+          ssh -i ~/.ssh/id_iso_copy root@192.168.1.25 qm reboot 107
