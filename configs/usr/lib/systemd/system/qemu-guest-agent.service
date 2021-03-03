@@ -5,8 +5,8 @@ Description=QEMU Guest Agent
 Restart=Always
 RestartSec=5
 ExecStart=/usr/bin/qemu-ga
-ExecStartPre=/bin/sleep 5m
-TimeoutSec=900
+ExecStartPre=/bin/sleep 1m
+TimeoutSec=90
 
 [Install]
 WantedBy=multi-user.target
