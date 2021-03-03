@@ -33,7 +33,7 @@ jobs:
           ADGUARD_HOME: ${{ secrets.ADGUARD_HOME }}
 
       - name: Build for deploy
-        run: sudo scripts/build.sh
+        run: scripts/build.sh
 
       - name: Copy artifact to PXE server and deploy
         run: |
