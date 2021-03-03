@@ -19,8 +19,8 @@ jobs:
 
       - name: Install build dependencies
         run: |
-          apt update
-          apt install -y cpio zstd xorriso syslinux syslinux-common isolinux
+          sudo apt update
+          sudo apt install -y cpio zstd xorriso syslinux syslinux-common isolinux
 
       - name: Build
         run: scripts/build.sh
