@@ -65,6 +65,8 @@ COPY --chown=root:root configs/ /
 RUN chmod 755 /usr/bin/init \
     && chown root:root /usr/bin/init
 
+COPY misc/igb_nocsum.patch /tmp/
+
 RUN pacman -Sv base-devel linux-headers --needed --noconfirm \
     && mkdir /tmp/igb-patched \
     && cd /tmp/igb-patched \
@@ -72,11 +74,12 @@ RUN pacman -Sv base-devel linux-headers --needed --noconfirm \
     && tar -xvf igb.tgz \
     && rm -f igb.tgz \
     && cd */src \
-    && patch ./e1000_nvm.c /etc/igb_nocsum.patch \
+    && patch ./e1000_nvm.c /tmp/igb_nocsum.patch \
     && make -j`nproc` install \
     && pacman -Rv base-devel linux-headers --unneeded --noconfirm \
     && rm -rf /tmp/igb-patched \
-    && rm -rf /var/cache/pacman/pkg/*
+    && rm -rf /var/cache/pacman/pkg/* \
+    && rm -f /tmp/igb_nocsum.patch
 
 RUN mkdir /tmp/adguard \
     && mkdir -p /var/lib/adguardhome/ \
