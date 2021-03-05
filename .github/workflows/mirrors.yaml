@@ -13,11 +13,11 @@ jobs:
       
     - name: Get Mirrors
       run: |
-        docker run -i --log-driver=none -a stdin -a stdout -a stderr jamcswain/arch-reflector:1.0.0 --verbose --country US --age 12 --protocol https --ipv4 --ipv6 --sort rate --save /dev/stdout > configs/etc/pacman.d/mirrorlist
+        docker run -i --log-driver=none -a stdin -a stdout -a stderr jamcswain/arch-reflector:1.0.0 --verbose --country US --age 12 --protocol https --ipv4 --ipv6 --sort rate --save /dev/stdout > rootfs/etc/pacman.d/mirrorlist
 
     - name: Check Mirrors
       run: |
-        check=`cat configs/etc/pacman.d/mirrorlist | grep 'Server = https://' | wc -l`
+        check=`cat rootfs/etc/pacman.d/mirrorlist | grep 'Server = https://' | wc -l`
 
         # ensure > 3 mirrors found
         if [ "$check" -lt 3 ]
@@ -29,6 +29,6 @@ jobs:
       run: |
         git config --local user.email "jacob@mcswain.dev"
         git config --local user.name "Jacob McSwain"
-        git add configs/etc/pacman.d/mirrorlist
+        git add rootfs/etc/pacman.d/mirrorlist
         git commit --signoff -m "Update Mirrorlist"
         git push

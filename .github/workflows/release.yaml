@@ -104,9 +104,9 @@ jobs:
       - name: Place sensitive configs in place
         id: add-creds
         run: |
-          echo "${ADGUARD_EXPORTER}" | base64 -d > configs/etc/default/adguard-exporter
-          echo "${REDWALL}" | base64 -d > configs/etc/default/redwall
-          echo "${ADGUARD_HOME}" | base64 -d > configs/var/lib/adguardhome/AdGuardHome.yaml
+          echo "${ADGUARD_EXPORTER}" | base64 -d > rootfs/etc/default/adguard-exporter
+          echo "${REDWALL}" | base64 -d > rootfs/etc/default/redwall
+          echo "${ADGUARD_HOME}" | base64 -d > rootfs/var/lib/adguardhome/AdGuardHome.yaml
         env:
           ADGUARD_EXPORTER: ${{ secrets.ADGUARD_EXPORTER }}
           REDWALL: ${{ secrets.REDWALL }}

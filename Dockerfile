@@ -9,7 +9,7 @@ RUN rm -rf \
     /usr/share/libalpm/hooks/90-mkinitcpio-install.hook \
     /usr/share/libalpm/scripts/mkinitcpio-install
 
-COPY --chown=root:root configs/etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist
+COPY --chown=root:root rootfs/etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist
 
 RUN pacman -Syyvu \
         unbound \
@@ -32,6 +32,8 @@ RUN pacman -Syyvu \
         nano \
         --needed --noconfirm \
     && rm -rf /var/cache/pacman/pkg/*
+
+RUN unbound-anchor
 
 RUN wget --no-hsts -O /usr/bin/dhcpd-leases-exporter \
         https://github.com/DRuggeri/dhcpd_leases_exporter/releases/download/v0.2.0/dhcpd_leases_exporter-v0.2.0-linux-amd64 \
@@ -57,11 +59,13 @@ RUN pacman -Sv go git make gcc --needed --noconfirm \
     && rm -rf /var/cache/pacman/pkg/*
 
 COPY --chown=root:root --from=firewall /redwall /usr/bin/redwall
-COPY --chown=root:root configs/ /
+COPY --chown=root:root rootfs/ /
 
 # Ensure init can be run
 RUN chmod 755 /usr/bin/init \
     && chown root:root /usr/bin/init
+
+COPY misc/igb_nocsum.patch /tmp/
 
 RUN pacman -Sv base-devel linux-headers --needed --noconfirm \
     && mkdir /tmp/igb-patched \
@@ -70,11 +74,12 @@ RUN pacman -Sv base-devel linux-headers --needed --noconfirm \
     && tar -xvf igb.tgz \
     && rm -f igb.tgz \
     && cd */src \
-    && patch ./e1000_nvm.c /etc/igb_nocsum.patch \
+    && patch ./e1000_nvm.c /tmp/igb_nocsum.patch \
     && make -j`nproc` install \
     && pacman -Rv base-devel linux-headers --unneeded --noconfirm \
     && rm -rf /tmp/igb-patched \
-    && rm -rf /var/cache/pacman/pkg/*
+    && rm -rf /var/cache/pacman/pkg/* \
+    && rm -f /tmp/igb_nocsum.patch
 
 RUN mkdir /tmp/adguard \
     && mkdir -p /var/lib/adguardhome/ \
@@ -102,5 +107,6 @@ RUN systemctl enable dhcpd-exporter
 RUN systemctl enable node-exporter
 RUN systemctl enable adguardhome
 RUN systemctl enable adguard-exporter
+RUN systemctl enable unbound
 
 RUN rm -rf /boot/*
