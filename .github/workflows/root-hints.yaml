@@ -13,12 +13,12 @@ jobs:
       
     - name: Get root hints
       run: |
-        curl -fsSL https://www.internic.net/domain/named.root > configs/etc/unbound/root.hints
+        curl -fsSL https://www.internic.net/domain/named.root > rootfs/etc/unbound/root.hints
 
     - name: Commit Mirrors
       run: |
         git config --local user.email "jacob@mcswain.dev"
         git config --local user.name "Jacob McSwain"
-        git add configs/etc/unbound/root.hints
+        git add rootfs/etc/unbound/root.hints
         git commit --signoff -m "Update Root Hints"
         git push

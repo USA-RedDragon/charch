@@ -9,7 +9,7 @@ RUN rm -rf \
     /usr/share/libalpm/hooks/90-mkinitcpio-install.hook \
     /usr/share/libalpm/scripts/mkinitcpio-install
 
-COPY --chown=root:root configs/etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist
+COPY --chown=root:root rootfs/etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist
 
 RUN pacman -Syyvu \
         unbound \
@@ -59,7 +59,7 @@ RUN pacman -Sv go git make gcc --needed --noconfirm \
     && rm -rf /var/cache/pacman/pkg/*
 
 COPY --chown=root:root --from=firewall /redwall /usr/bin/redwall
-COPY --chown=root:root configs/ /
+COPY --chown=root:root rootfs/ /
 
 # Ensure init can be run
 RUN chmod 755 /usr/bin/init \
