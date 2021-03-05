@@ -12,10 +12,10 @@ PXE-bootable Arch Linux-based OS setup for a home router
 - Early firewall start
 - UFW for easy firewall configuration
 - OpenSSH configured for pubkey auth
-- DNS over TLS (unbound, eventually)
+- Adguard Home DNS
+- Unbound as recursive DNS
 - DHCPv6 (radvd, eventually)
 - DHCPd (ISC)
-- BGP (gobgpd, eventually)
 - Wireguard (eventually)
 - QEMU guest agent
 - Live ISO booting
@@ -81,5 +81,4 @@ exit 0
 
 - Wireguard
 - Fail2Ban
-- DNS (unbound)
 - IPv6 compatible

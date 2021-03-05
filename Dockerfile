@@ -33,6 +33,8 @@ RUN pacman -Syyvu \
         --needed --noconfirm \
     && rm -rf /var/cache/pacman/pkg/*
 
+RUN unbound-anchor
+
 RUN wget --no-hsts -O /usr/bin/dhcpd-leases-exporter \
         https://github.com/DRuggeri/dhcpd_leases_exporter/releases/download/v0.2.0/dhcpd_leases_exporter-v0.2.0-linux-amd64 \
     && chmod a+x /usr/bin/dhcpd-leases-exporter
@@ -102,5 +104,6 @@ RUN systemctl enable dhcpd-exporter
 RUN systemctl enable node-exporter
 RUN systemctl enable adguardhome
 RUN systemctl enable adguard-exporter
+RUN systemctl enable unbound
 
 RUN rm -rf /boot/*

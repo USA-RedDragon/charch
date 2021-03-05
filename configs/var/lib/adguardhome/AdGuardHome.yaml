@@ -1,5 +1,6 @@
 bind_host: 192.168.1.1
 bind_port: 80
+beta_bind_port: 0
 users:
 - name: admin
   password: <PASSWORD_HERE>
@@ -28,12 +29,10 @@ dns:
   ratelimit_whitelist: []
   refuse_any: true
   upstream_dns:
-  - tls://1.1.1.1
-  - tls://1.0.0.1
+  - 127.0.0.1:5353
   upstream_dns_file: ""
   bootstrap_dns:
-  - 1.1.1.1
-  - 1.0.0.1
+  - 127.0.0.1:5353
   all_servers: false
   fastest_addr: false
   allowed_clients: []
@@ -62,6 +61,7 @@ dns:
   cache_time: 30
   rewrites: []
   blocked_services: []
+  customresolver: null
 tls:
   enabled: false
   server_name: ""
@@ -69,6 +69,8 @@ tls:
   port_https: 443
   port_dns_over_tls: 853
   port_dns_over_quic: 784
+  port_dnscrypt: 0
+  dnscrypt_config_file: ""
   allow_unencrypted_doh: false
   strict_sni_check: false
   certificate_chain: ""
