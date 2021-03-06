@@ -20,5 +20,7 @@ jobs:
         git config --local user.email "jacob@mcswain.dev"
         git config --local user.name "Jacob McSwain"
         git add rootfs/etc/unbound/root.hints
+        set +e
         git commit --signoff -m "Update Root Hints"
         git push
+        set -e
