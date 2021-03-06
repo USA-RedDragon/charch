@@ -30,5 +30,7 @@ jobs:
         git config --local user.email "jacob@mcswain.dev"
         git config --local user.name "Jacob McSwain"
         git add rootfs/etc/pacman.d/mirrorlist
+        set +e
         git commit --signoff -m "Update Mirrorlist"
         git push
+        set -e
