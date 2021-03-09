@@ -3,26 +3,26 @@
 ################################################################################
 
 # With:       reflector --verbose --country US --age 12 --protocol https --ipv4 --ipv6 --sort rate --save /dev/stdout
-# When:       2021-03-09 00:21:43 UTC
+# When:       2021-03-09 05:09:26 UTC
 # From:       https://www.archlinux.org/mirrors/status/json/
-# Retrieved:  2021-03-09 00:21:21 UTC
-# Last Check: 2021-03-08 23:53:13 UTC
+# Retrieved:  2021-03-09 05:09:02 UTC
+# Last Check: 2021-03-09 04:15:07 UTC
 
 Server = https://mirror.dal10.us.leaseweb.net/archlinux/$repo/os/$arch
 Server = https://plug-mirror.rcac.purdue.edu/archlinux/$repo/os/$arch
 Server = https://america.mirror.pkgbuild.com/$repo/os/$arch
-Server = https://mirror.wdc1.us.leaseweb.net/archlinux/$repo/os/$arch
 Server = https://arlm.tyzoid.com/$repo/os/$arch
 Server = https://mirror.sfo12.us.leaseweb.net/archlinux/$repo/os/$arch
+Server = https://zxcvfdsa.com/arch/$repo/os/$arch
 Server = https://arch.mirror.square-r00t.net/$repo/os/$arch
-Server = https://archmirror1.octyl.net/$repo/os/$arch
 Server = https://arch.hu.fo/archlinux/$repo/os/$arch
+Server = https://mirror.wdc1.us.leaseweb.net/archlinux/$repo/os/$arch
+Server = https://mirrors.kernel.org/archlinux/$repo/os/$arch
 Server = https://mirrors.xtom.com/archlinux/$repo/os/$arch
 Server = https://arch.mirror.constant.com/$repo/os/$arch
+Server = https://archmirror1.octyl.net/$repo/os/$arch
 Server = https://mirrors.rit.edu/archlinux/$repo/os/$arch
 Server = https://mirror.lty.me/archlinux/$repo/os/$arch
 Server = https://mirrors.sonic.net/archlinux/$repo/os/$arch
-Server = https://mirrors.kernel.org/archlinux/$repo/os/$arch
-Server = https://zxcvfdsa.com/arch/$repo/os/$arch
 Server = https://archlinux.surlyjake.com/archlinux/$repo/os/$arch
 Server = https://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch
