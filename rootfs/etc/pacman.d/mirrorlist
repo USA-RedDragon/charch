@@ -3,27 +3,24 @@
 ################################################################################
 
 # With:       reflector --verbose --country US --age 12 --protocol https --ipv4 --ipv6 --sort rate --save /dev/stdout
-# When:       2021-03-09 17:36:35 UTC
+# When:       2021-03-10 00:21:31 UTC
 # From:       https://www.archlinux.org/mirrors/status/json/
-# Retrieved:  2021-03-09 17:36:14 UTC
-# Last Check: 2021-03-09 17:01:08 UTC
+# Retrieved:  2021-03-10 00:21:11 UTC
+# Last Check: 2021-03-10 00:17:41 UTC
 
 Server = https://mirror.dal10.us.leaseweb.net/archlinux/$repo/os/$arch
-Server = https://mirror.pit.teraswitch.com/archlinux/$repo/os/$arch
-Server = https://plug-mirror.rcac.purdue.edu/archlinux/$repo/os/$arch
-Server = https://archmirror1.octyl.net/$repo/os/$arch
-Server = https://america.mirror.pkgbuild.com/$repo/os/$arch
-Server = https://arlm.tyzoid.com/$repo/os/$arch
-Server = https://arch.hu.fo/archlinux/$repo/os/$arch
-Server = https://mirrors.kernel.org/archlinux/$repo/os/$arch
-Server = https://arch.mirror.square-r00t.net/$repo/os/$arch
-Server = https://mirror.sfo12.us.leaseweb.net/archlinux/$repo/os/$arch
-Server = https://mirrors.xtom.com/archlinux/$repo/os/$arch
-Server = https://zxcvfdsa.com/arch/$repo/os/$arch
 Server = https://mirror.wdc1.us.leaseweb.net/archlinux/$repo/os/$arch
+Server = https://mirror.lty.me/archlinux/$repo/os/$arch
+Server = https://mirrors.kernel.org/archlinux/$repo/os/$arch
+Server = https://mirror.sfo12.us.leaseweb.net/archlinux/$repo/os/$arch
+Server = https://arch.hu.fo/archlinux/$repo/os/$arch
+Server = https://mirrors.xtom.com/archlinux/$repo/os/$arch
 Server = https://mirrors.rit.edu/archlinux/$repo/os/$arch
 Server = https://arch.mirror.constant.com/$repo/os/$arch
 Server = https://mirrors.sonic.net/archlinux/$repo/os/$arch
-Server = https://mirror.lty.me/archlinux/$repo/os/$arch
-Server = https://archlinux.surlyjake.com/archlinux/$repo/os/$arch
+Server = https://archmirror1.octyl.net/$repo/os/$arch
+Server = https://zxcvfdsa.com/arch/$repo/os/$arch
+Server = https://america.mirror.pkgbuild.com/$repo/os/$arch
+Server = https://arlm.tyzoid.com/$repo/os/$arch
+Server = https://plug-mirror.rcac.purdue.edu/archlinux/$repo/os/$arch
 Server = https://mirrors.ocf.berkeley.edu/archlinux/$repo/os/$arch
