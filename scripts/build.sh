@@ -83,7 +83,7 @@ if [ -z "${SKIP_KERNEL}" ]; then
 ./scripts/copy-kernel.sh artifacts/image/live/vmlinuz
 fi
 
-if [ -z "${SKIP_KERNEL}" || -z "${SKIP_ROOTFS}"]; then
+if [ -z "${SKIP_KERNEL}" || -z "${SKIP_ROOTFS}" ]; then
 cd artifacts/image/live/
 if [ -z "${SKIP_KERNEL}" ]; then
 sha512sum vmlinuz > vmlinuz.sha512sum
