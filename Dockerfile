@@ -49,6 +49,8 @@ RUN pacman -Sv go git make gcc --needed --noconfirm \
     && git checkout v1.1.1 \
     && sed -i 's/diff --exit-code/diff/g' Makefile.common \
     && make \
+    && go get github.com/kumina/unbound_exporter \
+    && GOBIN=/usr/bin/ go install github.com/kumina/unbound_exporter@latest \
     && pacman -Rv go git make gcc --unneeded --noconfirm \
     && mv ./node_exporter /usr/bin/node-exporter \
     && cd - \
