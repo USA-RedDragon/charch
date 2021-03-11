@@ -23,4 +23,4 @@ jobs:
           sudo apt install -y cpio zstd xorriso syslinux syslinux-common isolinux
 
       - name: Build
-        run: scripts/build.sh
+        run: scripts/build.sh --use-cache --skip-iso --skip-kernel --skip-rootfs

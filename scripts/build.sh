@@ -9,6 +9,12 @@ do
   case "$1" in
     --use-cache) DOCKER_BUILD_ARGS=""
         ;;
+    --skip-rootfs) SKIP_ROOTFS=true
+        ;;
+    --skip-kernel) SKIP_KERNEL=true
+        ;;
+    --skip-iso) SKIP_ISO=true
+        ;;
     --*) echo "bad option $1"
         ;;
     *) echo "argument $1"
@@ -32,6 +38,7 @@ docker pull archlinux:base
 docker pull jamcswain/redwall
 docker build -t jamcswain/charch:ahead . ${DOCKER_BUILD_ARGS}
 
+if [ -z "${SKIP_ROOTFS}" ]; then
 docker run -d --name ${CONTAINER_ROOTFS_EXPORT} jamcswain/charch:ahead sleep infinity
 
 docker export -o artifacts/charch-rootfs-ahead.tar ${CONTAINER_ROOTFS_EXPORT}
@@ -70,15 +77,25 @@ sudo find . | sudo cpio -H newc -o | zstd -T0 -v ${ZSTD_COMPRESSION} --exclude-c
 cd ${OLDPWD}
 rm -rf artifacts/charch-rootfs-ahead.tar
 sudo rm -rf ${FS_TMP_DIR}
+fi
 
+if [ -z "${SKIP_KERNEL}" ]; then
 ./scripts/copy-kernel.sh artifacts/image/live/vmlinuz
+fi
 
+if [ -z "${SKIP_KERNEL}" || -z "${SKIP_ROOTFS}"]; then
 cd artifacts/image/live/
+if [ -z "${SKIP_KERNEL}" ]; then
 sha512sum vmlinuz > vmlinuz.sha512sum
+fi
+if [ -z "${SKIP_ROOTFS}" ]; then
 sha512sum initrd > initrd.sha512sum
+fi
 cd ${OLDPWD}
+fi
 
-cat << __EOF__ > artifacts/image/isolinux/isolinux.cfg
+if [ -z "${SKIP_ISO}" ]; then
+    cat << __EOF__ > artifacts/image/isolinux/isolinux.cfg
 UI menu.c32
 
 prompt 0
@@ -93,10 +110,11 @@ label Charch
     append initrd=/live/initrd root=/dev/ram0 rw rdinit=/sbin/init console=ttyS0 lan_hwaddr=00:1b:22:76:28:02 wan_hwaddr=00:1b:22:76:28:03
 __EOF__
 
-SYSLINUX_MODULE_DIR=$(dirname `find /usr/lib/syslinux/ -type f -name ldlinux.c32 | head -n1`)
-cp -v -r ${SYSLINUX_MODULE_DIR}/* artifacts/image/isolinux/
-cp -v `find /usr/lib/ -type f -name isolinux.bin | head -n1` artifacts/image/isolinux/
-xorriso -as mkisofs -r -J -joliet-long -l -cache-inodes -isohybrid-mbr `find /usr/lib/ -type f -name isohdpfx.bin | head -n1` -partition_offset 16 -A "Charch" -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o charchlive.iso artifacts/image
-sha512sum charchlive.iso > charchlive.iso.sha512sum
+    SYSLINUX_MODULE_DIR=$(dirname `find /usr/lib/syslinux/ -type f -name ldlinux.c32 | head -n1`)
+    cp -v -r ${SYSLINUX_MODULE_DIR}/* artifacts/image/isolinux/
+    cp -v `find /usr/lib/ -type f -name isolinux.bin | head -n1` artifacts/image/isolinux/
+    xorriso -as mkisofs -r -J -joliet-long -l -cache-inodes -isohybrid-mbr `find /usr/lib/ -type f -name isohdpfx.bin | head -n1` -partition_offset 16 -A "Charch" -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o charchlive.iso artifacts/image
+    sha512sum charchlive.iso > charchlive.iso.sha512sum
+fi
 
 echo 'Artifact generation complete. Enjoy :)'
