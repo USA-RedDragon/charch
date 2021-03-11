@@ -9,6 +9,10 @@ do
   case "$1" in
     --use-cache) DOCKER_BUILD_ARGS=""
         ;;
+    --skip-rootfs) SKIP_ROOTFS=true
+        ;;
+    --skip-kernel) SKIP_KERNEL=true
+        ;;
     --skip-iso) SKIP_ISO=true
         ;;
     --*) echo "bad option $1"
@@ -34,6 +38,7 @@ docker pull archlinux:base
 docker pull jamcswain/redwall
 docker build -t jamcswain/charch:ahead . ${DOCKER_BUILD_ARGS}
 
+if [ -z "${SKIP_ROOTFS}" ]; then
 docker run -d --name ${CONTAINER_ROOTFS_EXPORT} jamcswain/charch:ahead sleep infinity
 
 docker export -o artifacts/charch-rootfs-ahead.tar ${CONTAINER_ROOTFS_EXPORT}
@@ -72,8 +77,11 @@ sudo find . | sudo cpio -H newc -o | zstd -T0 -v ${ZSTD_COMPRESSION} --exclude-c
 cd ${OLDPWD}
 rm -rf artifacts/charch-rootfs-ahead.tar
 sudo rm -rf ${FS_TMP_DIR}
+fi
 
+if [ -z "${SKIP_KERNEL}" ]; then
 ./scripts/copy-kernel.sh artifacts/image/live/vmlinuz
+fi
 
 cd artifacts/image/live/
 sha512sum vmlinuz > vmlinuz.sha512sum
