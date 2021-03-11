@@ -108,7 +108,7 @@ jobs:
           echo "${REDWALL}" | base64 -d > rootfs/etc/default/redwall
           echo "${ADGUARD_HOME}" | base64 -d > rootfs/var/lib/adguardhome/AdGuardHome.yaml
           echo "${SSH_HOST_KEYS}" | base64 -d > /tmp/ssh_host_keys.tgz
-          tar -xvf /tmp/ssh_host_keys.tgz -C /etc/ssh/
+          tar -xvf /tmp/ssh_host_keys.tgz -C rootfs/etc/ssh/
           rm -f /tmp/ssh_host_keys.tgz
         env:
           ADGUARD_EXPORTER: ${{ secrets.ADGUARD_EXPORTER }}
