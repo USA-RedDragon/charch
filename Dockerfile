@@ -70,6 +70,8 @@ COPY --chown=root:root --from=firewall /redwall /usr/bin/redwall
 COPY --chown=root:root --from=unbound-telemetry /app/unbound-telemetry/target/release/unbound-telemetry /usr/bin/unbound-telemetry
 COPY --chown=root:root rootfs/ /
 
+RUN unbound-control-setup
+
 # Ensure init can be run
 RUN chmod 755 /usr/bin/init \
     && chown root:root /usr/bin/init
