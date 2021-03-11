@@ -85,10 +85,10 @@ fi
 
 if [ -z "${SKIP_KERNEL}" || -z "${SKIP_ROOTFS}"]; then
 cd artifacts/image/live/
-if [ -z "${SKIP_KERNEL}" ]
+if [ -z "${SKIP_KERNEL}" ]; then
 sha512sum vmlinuz > vmlinuz.sha512sum
 fi
-if [ -z "${SKIP_ROOTFS}" ]
+if [ -z "${SKIP_ROOTFS}" ]; then
 sha512sum initrd > initrd.sha512sum
 fi
 cd ${OLDPWD}
