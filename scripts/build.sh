@@ -83,9 +83,14 @@ if [ -z "${SKIP_KERNEL}" ]; then
 ./scripts/copy-kernel.sh artifacts/image/live/vmlinuz
 fi
 
+if [ -z "${SKIP_KERNEL}" || -z "${SKIP_ROOTFS}"]; then
 cd artifacts/image/live/
+if [ -z "${SKIP_KERNEL}" ]
 sha512sum vmlinuz > vmlinuz.sha512sum
+fi
+if [ -z "${SKIP_ROOTFS}" ]
 sha512sum initrd > initrd.sha512sum
+fi
 cd ${OLDPWD}
 
 if [ -z "${SKIP_ISO}" ]; then
