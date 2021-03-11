@@ -5,7 +5,7 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/unbound_exporter -web.listen-address :9617
+ExecStart=/usr/bin/unbound-telemetry shm
 ProtectHome=on
 ProtectSystem=full
 KillSignal=SIGINT
