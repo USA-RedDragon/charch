@@ -40,7 +40,7 @@ RUN wget --no-hsts -O /usr/bin/dhcpd-leases-exporter \
     && chmod a+x /usr/bin/dhcpd-leases-exporter
 
 RUN wget --no-hsts -O /usr/bin/adguard-exporter \
-        https://github.com/ebrianne/adguard-exporter/releases/v1.13/download/adguard_exporter-linux-amd64 \
+        https://github.com/ebrianne/adguard-exporter/releases/download/v1.13/adguard_exporter-linux-amd64 \
     && chmod a+x /usr/bin/adguard-exporter
 
 RUN pacman -Sv go git make gcc --needed --noconfirm \
@@ -110,5 +110,6 @@ RUN systemctl enable node-exporter
 RUN systemctl enable adguardhome
 RUN systemctl enable adguard-exporter
 RUN systemctl enable unbound
+RUN systemctl enable unbound-exporter
 
 RUN rm -rf /boot/*
