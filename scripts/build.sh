@@ -9,6 +9,8 @@ do
   case "$1" in
     --use-cache) DOCKER_BUILD_ARGS=""
         ;;
+    --skip-iso) SKIP_ISO=true
+        ;;
     --*) echo "bad option $1"
         ;;
     *) echo "argument $1"
@@ -78,7 +80,8 @@ sha512sum vmlinuz > vmlinuz.sha512sum
 sha512sum initrd > initrd.sha512sum
 cd ${OLDPWD}
 
-cat << __EOF__ > artifacts/image/isolinux/isolinux.cfg
+if [ -z "${SKIP_ISO}" ]; then
+    cat << __EOF__ > artifacts/image/isolinux/isolinux.cfg
 UI menu.c32
 
 prompt 0
@@ -93,10 +96,11 @@ label Charch
     append initrd=/live/initrd root=/dev/ram0 rw rdinit=/sbin/init console=ttyS0 lan_hwaddr=00:1b:22:76:28:02 wan_hwaddr=00:1b:22:76:28:03
 __EOF__
 
-SYSLINUX_MODULE_DIR=$(dirname `find /usr/lib/syslinux/ -type f -name ldlinux.c32 | head -n1`)
-cp -v -r ${SYSLINUX_MODULE_DIR}/* artifacts/image/isolinux/
-cp -v `find /usr/lib/ -type f -name isolinux.bin | head -n1` artifacts/image/isolinux/
-xorriso -as mkisofs -r -J -joliet-long -l -cache-inodes -isohybrid-mbr `find /usr/lib/ -type f -name isohdpfx.bin | head -n1` -partition_offset 16 -A "Charch" -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o charchlive.iso artifacts/image
-sha512sum charchlive.iso > charchlive.iso.sha512sum
+    SYSLINUX_MODULE_DIR=$(dirname `find /usr/lib/syslinux/ -type f -name ldlinux.c32 | head -n1`)
+    cp -v -r ${SYSLINUX_MODULE_DIR}/* artifacts/image/isolinux/
+    cp -v `find /usr/lib/ -type f -name isolinux.bin | head -n1` artifacts/image/isolinux/
+    xorriso -as mkisofs -r -J -joliet-long -l -cache-inodes -isohybrid-mbr `find /usr/lib/ -type f -name isohdpfx.bin | head -n1` -partition_offset 16 -A "Charch" -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o charchlive.iso artifacts/image
+    sha512sum charchlive.iso > charchlive.iso.sha512sum
+fi
 
 echo 'Artifact generation complete. Enjoy :)'
