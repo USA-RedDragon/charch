@@ -92,6 +92,7 @@ if [ -z "${SKIP_ROOTFS}" ]; then
 sha512sum initrd > initrd.sha512sum
 fi
 cd ${OLDPWD}
+fi
 
 if [ -z "${SKIP_ISO}" ]; then
     cat << __EOF__ > artifacts/image/isolinux/isolinux.cfg
