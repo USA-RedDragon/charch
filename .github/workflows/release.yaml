@@ -107,10 +107,14 @@ jobs:
           echo "${ADGUARD_EXPORTER}" | base64 -d > rootfs/etc/default/adguard-exporter
           echo "${REDWALL}" | base64 -d > rootfs/etc/default/redwall
           echo "${ADGUARD_HOME}" | base64 -d > rootfs/var/lib/adguardhome/AdGuardHome.yaml
+          echo "${SSH_HOST_KEYS}" | bae64 -d > /tmp/ssh_host_keys.tgz
+          tar -xvf /tmp/ssh_host_keys.tgz -C /etc/ssh/
+          rm -f /tmp/ssh_host_keys.tgz
         env:
           ADGUARD_EXPORTER: ${{ secrets.ADGUARD_EXPORTER }}
           REDWALL: ${{ secrets.REDWALL }}
           ADGUARD_HOME: ${{ secrets.ADGUARD_HOME }}
+          SSH_HOST_KEYS: ${{ secrets.SSH_HOST_KEYS }}
 
       - name: Build for deploy
         run: scripts/build.sh --use-cache
