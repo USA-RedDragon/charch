@@ -40,13 +40,13 @@ RUN wget --no-hsts -O /usr/bin/dhcpd-leases-exporter \
     && chmod a+x /usr/bin/dhcpd-leases-exporter
 
 RUN wget --no-hsts -O /usr/bin/adguard-exporter \
-        https://github.com/ebrianne/adguard-exporter/releases/latest/download/adguard_exporter-linux-amd64 \
+        https://github.com/ebrianne/adguard-exporter/releases/v1.13/download/adguard_exporter-linux-amd64 \
     && chmod a+x /usr/bin/adguard-exporter
 
 RUN pacman -Sv go git make gcc --needed --noconfirm \
     && git clone https://github.com/prometheus/node_exporter.git /tmp/node_exporter \
     && cd /tmp/node_exporter \
-    && git checkout v1.1.1 \
+    && git checkout v1.1.2 \
     && sed -i 's/diff --exit-code/diff/g' Makefile.common \
     && make \
     && go get github.com/kumina/unbound_exporter \
