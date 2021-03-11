@@ -1,5 +1,15 @@
 FROM jamcswain/redwall as firewall
 
+FROM rust:latest as unbound-telemetry
+
+WORKDIR /app
+
+RUN apt-get update && \
+    apt-get install -y git && \
+    git clone https://github.com/svartalf/unbound-telemetry.git && \
+    cd unbound-telemetry && \
+    cargo build --release --features vendored
+
 FROM archlinux:base
 
 # Remove mkinitcpio hooks
@@ -33,8 +43,6 @@ RUN pacman -Syyvu \
         --needed --noconfirm \
     && rm -rf /var/cache/pacman/pkg/*
 
-RUN unbound-anchor
-
 RUN wget --no-hsts -O /usr/bin/dhcpd-leases-exporter \
         https://github.com/DRuggeri/dhcpd_leases_exporter/releases/download/v0.2.0/dhcpd_leases_exporter-v0.2.0-linux-amd64 \
     && chmod a+x /usr/bin/dhcpd-leases-exporter
@@ -49,8 +57,6 @@ RUN pacman -Sv go git make gcc --needed --noconfirm \
     && git checkout v1.1.2 \
     && sed -i 's/diff --exit-code/diff/g' Makefile.common \
     && make \
-    && go get github.com/kumina/unbound_exporter \
-    && GOBIN=/usr/bin/ go install github.com/kumina/unbound_exporter@latest \
     && pacman -Rv go git make gcc --unneeded --noconfirm \
     && mv ./node_exporter /usr/bin/node-exporter \
     && cd - \
@@ -61,6 +67,7 @@ RUN pacman -Sv go git make gcc --needed --noconfirm \
     && rm -rf /var/cache/pacman/pkg/*
 
 COPY --chown=root:root --from=firewall /redwall /usr/bin/redwall
+COPY --chown=root:root --from=unbound-telemetry /app/unbound-telemetry/target/release/unbound-telemetry /usr/bin/unbound-telemetry
 COPY --chown=root:root rootfs/ /
 
 # Ensure init can be run
