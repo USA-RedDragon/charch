@@ -50,7 +50,7 @@ mkdir -p artifacts/image/isolinux
 mkdir -p artifacts/image/live
 
 FS_TMP_DIR=$(mktemp -d)
-OLDPWD=$(pwd)
+
 sudo chown root:root ${FS_TMP_DIR}
 sudo tar -C ${FS_TMP_DIR} -xf artifacts/charch-rootfs-ahead.tar
 
@@ -58,14 +58,13 @@ sudo tar -C ${FS_TMP_DIR} -xf artifacts/charch-rootfs-ahead.tar
 sudo rm -rf ${FS_TMP_DIR}/etc/resolv.conf
 sudo ln -sf /run/systemd/resolve/resolv.conf ${FS_TMP_DIR}/etc/resolv.conf
 
-cd ${FS_TMP_DIR}
 # Size hint is better overesitmated than underestimated, and we can't easily
 # calculate the overhead from cpio, just add 0.2%
 
 # Sizes around this commit, not sure why DU is higher than the cpio file size
 # cpio 1505546240
 # du   1512420613
-SIZE_HINT=$(sudo du -sb | awk '{ print $1 }' | awk '{print int($1*1.02)}')
+SIZE_HINT=$(sudo du -sb ${FS_TMP_DIR} | awk '{ print $1 }' | awk '{print int($1*1.02)}')
 
 # Use fast compression on my laptop
 # High compression elsewhere
@@ -74,8 +73,8 @@ if [ "$(hostname)" = "EdgeOfAges" ]; then
     ZSTD_COMPRESSION="--fast"
 fi
 
-sudo find . | sudo cpio -H newc -o | zstd -T0 -v ${ZSTD_COMPRESSION} --exclude-compressed --size-hint=${SIZE_HINT} > ${OLDPWD}/artifacts/image/live/initrd
-cd ${OLDPWD}
+sudo find ${FS_TMP_DIR} | sudo cpio -H newc -o | zstd -T0 -v ${ZSTD_COMPRESSION} --exclude-compressed --size-hint=${SIZE_HINT} > ./artifacts/image/live/initrd
+
 rm -rf artifacts/charch-rootfs-ahead.tar
 sudo rm -rf ${FS_TMP_DIR}
 fi
