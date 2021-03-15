@@ -51,6 +51,7 @@ mkdir -p artifacts/image/live
 
 FS_TMP_DIR=$(mktemp -d)
 OLDPWD=$(pwd)
+sudo chown root:root ${FS_TMP_DIR}
 sudo tar -C ${FS_TMP_DIR} -xf artifacts/charch-rootfs-ahead.tar
 
 # Fix DNS resolution from Docker back to systemd
