@@ -132,6 +132,7 @@ jobs:
             User ${SSH_USER}
             IdentityFile ~/.ssh/id_iso_copy
           END
+          ssh -v pxe cp -v /var/lib/vz/template/iso/charchlive-firewall.iso /var/lib/vz/template/iso/charchlive-backup.iso
           scp -v charchlive.iso pxe:/var/lib/vz/template/iso/charchlive-firewall.iso
           ssh -v pxe qm reboot 107
         env:
