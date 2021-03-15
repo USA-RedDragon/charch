@@ -50,6 +50,7 @@ mkdir -p artifacts/image/isolinux
 mkdir -p artifacts/image/live
 
 FS_TMP_DIR=$(mktemp -d)
+OLDPWD=$(pwd)
 
 sudo chown root:root ${FS_TMP_DIR}
 sudo tar -C ${FS_TMP_DIR} -xf artifacts/charch-rootfs-ahead.tar
@@ -73,7 +74,7 @@ if [ "$(hostname)" = "EdgeOfAges" ]; then
     ZSTD_COMPRESSION="--fast"
 fi
 
-sudo find ${FS_TMP_DIR} | sudo cpio -H newc -o | zstd -T0 -v ${ZSTD_COMPRESSION} --exclude-compressed --size-hint=${SIZE_HINT} > ./artifacts/image/live/initrd
+sudo sh -c "cd ${FS_TMP_DIR} && find . | cpio -H newc -o | zstd -T0 -v ${ZSTD_COMPRESSION} --exclude-compressed --size-hint=${SIZE_HINT} > ${OLDPWD}/artifacts/image/live/initrd"
 
 rm -rf artifacts/charch-rootfs-ahead.tar
 sudo rm -rf ${FS_TMP_DIR}
