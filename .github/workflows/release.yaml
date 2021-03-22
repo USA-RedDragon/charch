@@ -117,7 +117,7 @@ jobs:
           REDWALL: ${{ secrets.REDWALL }}
           ADGUARD_HOME: ${{ secrets.ADGUARD_HOME }}
           SSH_HOST_KEYS: ${{ secrets.SSH_HOST_KEYS }}
-          WG0_CONF: ${{ secrets WG0_CONF }}
+          WG0_CONF: ${{ secrets.WG0_CONF }}
 
       - name: Build for deploy
         run: scripts/build.sh --use-cache
