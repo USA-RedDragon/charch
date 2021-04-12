@@ -32,14 +32,6 @@ ip route add 192.168.1.0/24 dev lan
 # Wireguard
 modprobe wireguard
 
-interfaces=`find /etc/wireguard -type f`
-if [[ -n $interfaces ]]; then
-    interface=`echo $interfaces | head -n 1`
-
-    echo "Starting Wireguard on $interface"
-    wg-quick up $interface
-fi
-
 # Firewall
 modprobe nf_tables
 nft -f /etc/nftables.conf
